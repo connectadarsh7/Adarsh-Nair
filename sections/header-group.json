@@ -17,14 +17,14 @@
         "announcement_n8JAfF": {
           "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping on orders over ₹999",
             "link": ""
           }
         },
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Free shipping on orders over ₹999",
+            "text": "Use code LOOM10 for 10% off your first order",
             "link": ""
           }
         }
@@ -33,7 +33,12 @@
         "announcement_n8JAfF",
         "announcement-bar-0"
       ],
-      "settings": {}
+      "settings": {
+        "background_color": "#1f1f1f",
+        "text_color": "#FFFFFF",
+        "font_size": 13,
+        "mobile_font_size": 13
+      }
     },
     "header": {
       "type": "header",
