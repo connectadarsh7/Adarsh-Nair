@@ -67,7 +67,7 @@
         "logo_text": "Loomhaus",
         "tagline": "Clothes made to be worn for years, not seasons.",
         "button_label": "SHOP THE DROP",
-        "button_link": "",
+        "button_link": "shopify://collections",
         "header_background": "#f5f2ec",
         "header_text_color": "#292a27",
         "border_color": "#d8d2c7"
