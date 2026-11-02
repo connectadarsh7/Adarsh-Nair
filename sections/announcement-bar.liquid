@@ -1,63 +1,85 @@
 {{ 'custom-announcement-bar.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-announcement-bar.js' | asset_url }}" defer="defer"></script>
 
-<div class="loomhaus-announcement" role="region" aria-label="Store announcements">
-  <div class="loomhaus-announcement__inner">
+<div class="loomhaus-announcement" data-announcement-section="{{ section.id }}">
+  <div class="loomhaus-announcement__desktop">
+    {% for block in section.blocks %}
+      <div class="loomhaus-announcement__desktop-message" {{ block.shopify_attributes }}>
+        {% if block.settings.link != blank %}
+          <a href="{{ block.settings.link }}">
+            {{ block.settings.text | escape }}
+          </a>
+        {% else %}
+          {{ block.settings.text | escape }}
+        {% endif %}
+      </div>
 
-    <p class="loomhaus-announcement__message">
-      {% if section.settings.message_one_link != blank %}
-        <a href="{{ section.settings.message_one_link }}">
-          {{ section.settings.message_one | escape }}
-        </a>
-      {% else %}
-        {{ section.settings.message_one | escape }}
-      {% endif %}
-    </p>
+      {% unless forloop.last %}
+        <span class="loomhaus-announcement__separator" aria-hidden="true">✦</span>
+      {% endunless %}
+    {% endfor %}
+  </div>
 
-    <span class="loomhaus-announcement__separator" aria-hidden="true">✳</span>
-
-    <p class="loomhaus-announcement__message">
-      {% if section.settings.message_two_link != blank %}
-        <a href="{{ section.settings.message_two_link }}">
-          {{ section.settings.message_two | escape }}
-        </a>
-      {% else %}
-        {{ section.settings.message_two | escape }}
-      {% endif %}
-    </p>
-
+  <div class="loomhaus-announcement__mobile" aria-live="polite" aria-atomic="true">
+    {% for block in section.blocks %}
+      <div
+        class="loomhaus-announcement__mobile-message{% if forloop.first %} is-active{% endif %}"
+        data-announcement-slide
+        {% unless forloop.first %}aria-hidden="true"{% endunless %}
+      >
+        {% if block.settings.link != blank %}
+          <a href="{{ block.settings.link }}">
+            {{ block.settings.text | escape }}
+          </a>
+        {% else %}
+          {{ block.settings.text | escape }}
+        {% endif %}
+      </div>
+    {% endfor %}
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Loomhaus announcement",
-  "settings": [
+  "max_blocks": 2,
+  "settings": [],
+  "blocks": [
     {
-      "type": "text",
-      "id": "message_one",
-      "label": "First announcement",
-      "default": "Free shipping on orders over ₹999"
-    },
-    {
-      "type": "url",
-      "id": "message_one_link",
-      "label": "First announcement link"
-    },
-    {
-      "type": "text",
-      "id": "message_two",
-      "label": "Second announcement",
-      "default": "Use code LOOM10 for 10% off your first order"
-    },
-    {
-      "type": "url",
-      "id": "message_two_link",
-      "label": "Second announcement link"
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement text",
+          "default": "Free shipping on orders over ₹999"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Announcement link"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Loomhaus announcement"
+      "name": "Loomhaus announcement",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "Free shipping on orders over ₹999"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "Use code LOOM10 for 10% off your first order"
+          }
+        }
+      ]
     }
   ]
 }
