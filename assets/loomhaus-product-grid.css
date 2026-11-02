@@ -1,0 +1,473 @@
+
+/* =====================================
+   LOOMHAUS PRODUCT GRID
+===================================== */
+
+.loomhaus-lookbook {
+  width: 100%;
+  background: #f5f2ec;
+  color: #292a27;
+  padding: 65px 0;
+  box-sizing: border-box;
+}
+
+.loomhaus-lookbook * {
+  box-sizing: border-box;
+}
+
+.loomhaus-lookbook__container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 7%;
+}
+
+/* =====================================
+   HEADING ROW
+===================================== */
+
+.loomhaus-lookbook__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 24px;
+}
+
+.loomhaus-lookbook__eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #777a67;
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.loomhaus-lookbook__heading h2 {
+  margin: 0;
+  color: #292a27;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+}
+
+.loomhaus-lookbook__helper {
+  margin: 0 0 5px;
+  color: #77776f;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+/* =====================================
+   PRODUCT GRID
+===================================== */
+
+.loomhaus-lookbook__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.loomhaus-lookbook__tile {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.83;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #e5dfd4;
+}
+
+.loomhaus-lookbook__image-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.loomhaus-lookbook__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.loomhaus-lookbook__tile:hover .loomhaus-lookbook__image {
+  transform: scale(1.035);
+}
+
+.loomhaus-lookbook__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #e5dfd4;
+}
+
+/* =====================================
+   HOTSPOT
+===================================== */
+
+.loomhaus-lookbook__hotspot {
+  position: absolute;
+  z-index: 2;
+  left: var(--hotspot-x, 50%);
+  top: var(--hotspot-y, 50%);
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #292a27;
+
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.loomhaus-lookbook__hotspot span {
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.loomhaus-lookbook__hotspot:hover {
+  background: #777a67;
+  color: #ffffff;
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+/* =====================================
+   PRODUCT LABEL
+===================================== */
+
+.loomhaus-lookbook__label {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  bottom: 12px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: calc(100% - 24px);
+
+  padding: 7px 11px;
+  border-radius: 30px;
+
+  background: #ffffff;
+  color: #292a27;
+  text-decoration: none;
+
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.loomhaus-lookbook__product-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loomhaus-lookbook__product-price {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Empty tile */
+.loomhaus-lookbook__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: #77776f;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+}
+
+/* =====================================
+   QUICK VIEW
+===================================== */
+
+.loomhaus-quick-view {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: none;
+}
+
+.loomhaus-quick-view.is-open {
+  display: block;
+}
+
+.loomhaus-quick-view__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.loomhaus-quick-view__panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: min(850px, calc(100% - 40px));
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+
+  padding: 28px;
+  border-radius: 14px;
+  background: #f5f2ec;
+}
+
+.loomhaus-quick-view__close {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 15px;
+
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #292a27;
+
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.loomhaus-quick-view__image-wrap {
+  width: 100%;
+  aspect-ratio: 0.85;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #e5dfd4;
+}
+
+.loomhaus-quick-view__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.loomhaus-quick-view__eyebrow {
+  color: #777a67;
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.loomhaus-quick-view__details h2 {
+  margin: 12px 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.loomhaus-quick-view__price {
+  margin: 0 0 16px;
+  font-family: "Cabin", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.loomhaus-quick-view__description {
+  margin-bottom: 20px;
+  color: #77776f;
+  font-family: "Cabin", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.loomhaus-quick-view__details label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+}
+
+.loomhaus-quick-view__details select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  margin-bottom: 14px;
+  border: 1px solid #d5d0c5;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #292a27;
+}
+
+.loomhaus-quick-view__add {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 30px;
+  background: #292a27;
+  color: #ffffff;
+  font-family: "Cabin", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loomhaus-quick-view__view-product {
+  display: block;
+  margin-top: 14px;
+  color: #292a27;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+.loomhaus-quick-view__message {
+  min-height: 18px;
+  color: #777a67;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media screen and (min-width: 750px) and (max-width: 1050px) {
+  .loomhaus-lookbook__container {
+    padding: 0 5%;
+  }
+
+  .loomhaus-lookbook__grid {
+    gap: 10px;
+  }
+
+  .loomhaus-lookbook__label {
+    left: 8px;
+    bottom: 8px;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media screen and (max-width: 749px) {
+  .loomhaus-lookbook {
+    padding: 38px 0;
+  }
+
+  .loomhaus-lookbook__container {
+    padding: 0 18px;
+  }
+
+  .loomhaus-lookbook__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .loomhaus-lookbook__heading h2 {
+    font-size: 29px;
+  }
+
+  .loomhaus-lookbook__helper {
+    text-align: left;
+    font-size: 11px;
+  }
+
+  .loomhaus-lookbook__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .loomhaus-lookbook__tile {
+    aspect-ratio: 0.78;
+    border-radius: 10px;
+  }
+
+  .loomhaus-lookbook__hotspot {
+    width: 31px;
+    height: 31px;
+  }
+
+  .loomhaus-lookbook__hotspot span {
+    font-size: 22px;
+  }
+
+  .loomhaus-lookbook__label {
+    left: 7px;
+    bottom: 7px;
+    gap: 4px;
+    max-width: calc(100% - 14px);
+    padding: 6px 8px;
+    font-size: 8px;
+  }
+
+  .loomhaus-quick-view__panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+
+    width: 100%;
+    max-height: 90vh;
+    padding: 22px 18px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .loomhaus-quick-view__content {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .loomhaus-quick-view__image-wrap {
+    max-height: 280px;
+    aspect-ratio: 1.2;
+  }
+
+  .loomhaus-quick-view__details h2 {
+    font-size: 24px;
+  }
+}
+
+/* =====================================
+   REDUCED MOTION
+===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .loomhaus-lookbook__image,
+  .loomhaus-lookbook__hotspot {
+    transition: none;
+  }
+}
