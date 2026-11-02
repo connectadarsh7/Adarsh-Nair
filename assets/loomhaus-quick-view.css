@@ -1,0 +1,312 @@
+
+/* =========================================
+   LOOMHAUS QUICK VIEW - DESKTOP
+========================================= */
+
+.loomhaus-quick-view {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.loomhaus-quick-view.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.loomhaus-quick-view__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.loomhaus-quick-view__panel {
+  position: relative;
+  z-index: 2;
+  width: 612px;
+  max-width: 100%;
+  min-height: 385px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+.loomhaus-quick-view__content {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.loomhaus-quick-view__image-wrap {
+  width: 240px;
+  height: 337px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f3f0e9;
+}
+
+.loomhaus-quick-view__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.loomhaus-quick-view__details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.loomhaus-quick-view__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #292927;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__product-heading {
+  padding-right: 24px;
+}
+
+.loomhaus-quick-view__product-heading h2 {
+  margin: 0 0 6px;
+  color: #292927;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.loomhaus-quick-view__price {
+  margin: 0;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.loomhaus-quick-view__description {
+  margin: 18px 0 12px;
+  color: #686861;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.loomhaus-quick-view__option-group {
+  margin-bottom: 12px;
+}
+
+.loomhaus-quick-view__option-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.loomhaus-quick-view__colors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.loomhaus-quick-view__color {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ded8cd;
+  border-radius: 8px;
+  background: #fff;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__color.is-selected {
+  border: 1.5px solid #292927;
+  background: #f5f2ec;
+}
+
+.loomhaus-quick-view__color-dot {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  border: 1px solid #ded8cd;
+  border-radius: 50%;
+}
+
+.loomhaus-quick-view__select {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #292927;
+  border-radius: 7px;
+  background: #fff;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+}
+
+.loomhaus-quick-view__add {
+  width: 100%;
+  min-height: 45px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border: 0;
+  border-radius: 8px;
+  background: #292927;
+  color: #fff;
+  font-family: "Cabin", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__add:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.loomhaus-quick-view__arrow {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.loomhaus-quick-view__message {
+  margin: 6px 0 0;
+  color: #686861;
+  font-size: 12px;
+}
+
+.loomhaus-quick-view [hidden] {
+  display: none !important;
+}
+
+/* =========================================
+   MOBILE - WE WILL REFINE AGAINST FIGMA
+========================================= */
+
+@media screen and (max-width: 749px) {
+  .loomhaus-quick-view {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .loomhaus-quick-view__panel {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 20px 14px 18px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .loomhaus-quick-view__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .loomhaus-quick-view__image-wrap {
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+  }
+
+  .loomhaus-quick-view__image {
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  .loomhaus-quick-view__close {
+    top: 195px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+
+  .loomhaus-quick-view__product-heading {
+    padding-right: 28px;
+  }
+
+  .loomhaus-quick-view__product-heading h2 {
+    font-size: 16px;
+  }
+
+  .loomhaus-quick-view__price {
+    font-size: 13px;
+  }
+
+  .loomhaus-quick-view__description {
+    margin: 10px 0;
+    font-size: 11px;
+  }
+
+  .loomhaus-quick-view__option-group {
+    margin-bottom: 10px;
+  }
+
+  .loomhaus-quick-view__option-label {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .loomhaus-quick-view__colors {
+    gap: 8px;
+  }
+
+  .loomhaus-quick-view__color {
+    min-height: 32px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .loomhaus-quick-view__select {
+    height: 34px;
+    font-size: 11px;
+  }
+
+  .loomhaus-quick-view__add {
+    min-height: 40px;
+    margin-top: 0;
+    padding: 10px 18px;
+    font-size: 11px;
+  }
+}

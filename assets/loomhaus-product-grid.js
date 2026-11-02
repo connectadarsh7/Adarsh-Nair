@@ -1,293 +1,330 @@
+
 document.addEventListener('DOMContentLoaded', () => {
-
   document.querySelectorAll('.loomhaus-lookbook').forEach((section) => {
-
     const modal = section.querySelector('[data-quick-view-modal]');
-
     if (!modal) return;
 
+    const panel = modal.querySelector('.loomhaus-quick-view__panel');
     const image = modal.querySelector('[data-quick-image]');
     const title = modal.querySelector('[data-quick-title]');
     const price = modal.querySelector('[data-quick-price]');
     const description = modal.querySelector('[data-quick-description]');
-
     const colorGroup = modal.querySelector('[data-color-group]');
     const colorOptions = modal.querySelector('[data-color-options]');
-
     const sizeGroup = modal.querySelector('[data-size-group]');
     const sizeSelect = modal.querySelector('[data-size-select]');
-
     const otherOptions = modal.querySelector('[data-other-options]');
-
     const addButton = modal.querySelector('[data-quick-add]');
     const addButtonText = modal.querySelector('[data-quick-add-text]');
+    const productLink = modal.querySelector('[data-quick-product-link]');
     const message = modal.querySelector('[data-quick-message]');
 
     let activeProduct = null;
-    let selectedOptions = [];
-    let previousFocus = null;
+    let selectedOptions = {};
+    let lastFocusedElement = null;
 
-    const formatMoney = (amount) => {
+    const money = (amount) => {
+      const currency = window.Shopify?.currency?.active || 'INR';
+
       return new Intl.NumberFormat(
         document.documentElement.lang || 'en-IN',
         {
           style: 'currency',
-          currency: window.Shopify?.currency?.active || 'INR'
+          currency
         }
-      ).format(amount / 100);
+      ).format(Number(amount) / 100);
     };
 
-    const optionType = (name) => {
-      const normalized = name.toLowerCase();
-
-      if (normalized.includes('color') || normalized.includes('colour')) {
-        return 'color';
-      }
-
-      if (normalized.includes('size')) {
-        return 'size';
-      }
-
-      return 'other';
+    const getOptionIndex = (names, keywords) => {
+      return names.findIndex((name) =>
+        keywords.some((keyword) =>
+          name.toLowerCase().includes(keyword)
+        )
+      );
     };
 
     const getSelectedVariant = () => {
       if (!activeProduct) return null;
 
       return activeProduct.variants.find((variant) => {
-        return variant.options.every((option, index) => {
-          return option === selectedOptions[index];
+        return variant.options.every((value, index) => {
+          const optionName = activeProduct.options[index];
+
+          return selectedOptions[optionName] === value;
         });
       }) || null;
     };
 
-    const updateVariant = () => {
+    const updateVariantState = () => {
       const variant = getSelectedVariant();
 
-      if (!variant) {
-        addButton.disabled = true;
-        addButtonText.textContent = 'UNAVAILABLE';
-        return;
+      if (variant) {
+        price.textContent = money(variant.price);
       }
 
-      price.textContent = formatMoney(variant.price);
+      const isAvailable = Boolean(variant && variant.available);
 
-      if (variant.featured_image?.src) {
+      addButton.disabled = !isAvailable;
+
+      if (addButtonText) {
+        addButtonText.textContent = isAvailable
+          ? 'ADD TO CART'
+          : variant
+            ? 'SOLD OUT'
+            : 'CHOOSE OPTIONS';
+      }
+
+      if (variant && variant.featured_image?.src) {
         image.src = variant.featured_image.src;
       }
-
-      if (variant.available) {
-        addButton.disabled = false;
-        addButtonText.textContent = 'ADD TO CART';
-      } else {
-        addButton.disabled = true;
-        addButtonText.textContent = 'SOLD OUT';
-      }
-
-      // Update colour availability based on selected options.
-      colorOptions.querySelectorAll('[data-color-value]').forEach((button) => {
-        const colorValue = button.dataset.colorValue;
-        const colorIndex = button.dataset.optionIndex;
-
-        const matchingVariant = activeProduct.variants.some((item) => {
-          return item.options[colorIndex] === colorValue &&
-            item.available &&
-            item.options.every((option, index) => {
-              return index === Number(colorIndex) ||
-                index === Number(sizeSelect.dataset.optionIndex) ||
-                option === selectedOptions[index];
-            });
-        });
-
-        button.disabled = !matchingVariant;
-      });
     };
 
-    const getColorCode = (color) => {
-      const normalized = color.toLowerCase();
-
-      const colors = {
-        black: '#222222',
-        white: '#ffffff',
-        navy: '#172c4b',
-        blue: '#315b91',
-        red: '#c43d35',
-        green: '#4d7554',
-        olive: '#777a67',
-        grey: '#929292',
-        gray: '#929292',
-        brown: '#795548',
-        beige: '#d8c7a5',
-        cream: '#eee5d3',
-        yellow: '#e6c34a',
-        pink: '#e8a4b7',
-        purple: '#8465a7',
-        orange: '#d9823b'
-      };
-
-      return colors[normalized] || '#dedbd4';
-    };
-
-    const createColorOptions = (product, optionIndex) => {
-      const values = [...new Set(
-        product.variants.map((variant) => variant.options[optionIndex])
-      )];
-
+    const createColorOptions = (optionName, values) => {
       colorOptions.innerHTML = '';
       colorGroup.hidden = false;
 
       values.forEach((value) => {
         const button = document.createElement('button');
-
         button.type = 'button';
-        button.className = 'loomhaus-quick-view__color';
-
-        button.dataset.colorValue = value;
-        button.dataset.optionIndex = optionIndex;
+        button.className = 'loomhaus-quick-view__color-button';
 
         const dot = document.createElement('span');
         dot.className = 'loomhaus-quick-view__color-dot';
-        dot.style.backgroundColor = getColorCode(value);
+
+        const normalized = value.toLowerCase();
+
+        if (
+          normalized.includes('black') ||
+          normalized.includes('navy')
+        ) {
+          dot.classList.add('is-dark');
+        }
 
         const text = document.createElement('span');
         text.textContent = value;
 
         button.append(dot, text);
 
+        if (selectedOptions[optionName] === value) {
+          button.classList.add('is-selected');
+        }
+
         button.addEventListener('click', () => {
-          selectedOptions[optionIndex] = value;
+          selectedOptions[optionName] = value;
 
-          colorOptions.querySelectorAll('.loomhaus-quick-view__color')
-            .forEach((item) => {
-              item.classList.toggle(
-                'is-selected',
-                item.dataset.colorValue === value
-              );
-            });
+          colorOptions
+            .querySelectorAll('.loomhaus-quick-view__color-button')
+            .forEach((item) => item.classList.remove('is-selected'));
 
-          updateVariant();
+          button.classList.add('is-selected');
+
+          updateSizeOptions();
+          updateVariantState();
         });
 
         colorOptions.appendChild(button);
       });
-
-      colorOptions.querySelector(
-        '[data-color-value="' + CSS.escape(selectedOptions[optionIndex]) + '"]'
-      )?.classList.add('is-selected');
     };
 
-    const createSizeOptions = (product, optionIndex) => {
-      const values = [...new Set(
-        product.variants.map((variant) => variant.options[optionIndex])
-      )];
+    const updateSizeOptions = () => {
+      if (!activeProduct) return;
+
+      const names = activeProduct.options;
+      const sizeIndex = getOptionIndex(names, ['size']);
+
+      if (sizeIndex === -1) {
+        sizeGroup.hidden = true;
+        return;
+      }
+
+      const sizeName = names[sizeIndex];
+      const sizeValues = [
+        ...new Set(activeProduct.variants.map((variant) =>
+          variant.options[sizeIndex]
+        ))
+      ];
+
+      const colorIndex = getOptionIndex(names, ['color', 'colour']);
+
+      const availableSizes = sizeValues.filter((size) => {
+        return activeProduct.variants.some((variant) => {
+          const matchesColor = colorIndex === -1 ||
+            variant.options[colorIndex] === selectedOptions[names[colorIndex]];
+
+          return matchesColor &&
+            variant.options[sizeIndex] === size &&
+            variant.available;
+        });
+      });
 
       sizeSelect.innerHTML = '';
 
       const placeholder = document.createElement('option');
       placeholder.value = '';
       placeholder.textContent = 'Choose your size';
-
       sizeSelect.appendChild(placeholder);
 
-      values.forEach((value) => {
+      sizeValues.forEach((size) => {
         const option = document.createElement('option');
-
-        option.value = value;
-        option.textContent = value;
-
+        option.value = size;
+        option.textContent = size;
+        option.disabled = !availableSizes.includes(size);
         sizeSelect.appendChild(option);
       });
 
-      sizeSelect.dataset.optionIndex = optionIndex;
+      if (
+        selectedOptions[sizeName] &&
+        availableSizes.includes(selectedOptions[sizeName])
+      ) {
+        sizeSelect.value = selectedOptions[sizeName];
+      } else {
+        selectedOptions[sizeName] = '';
+        sizeSelect.value = '';
+      }
+
       sizeGroup.hidden = false;
-
-      sizeSelect.value = selectedOptions[optionIndex] || '';
-
-      sizeSelect.addEventListener('change', () => {
-        selectedOptions[optionIndex] = sizeSelect.value;
-        updateVariant();
-      });
     };
 
-    const createOtherOptions = (product, optionIndex) => {
-      const values = [...new Set(
-        product.variants.map((variant) => variant.options[optionIndex])
-      )];
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'loomhaus-quick-view__option-group';
-
-      const label = document.createElement('label');
-      label.className = 'loomhaus-quick-view__option-label';
-      label.textContent = product.options[optionIndex];
-
-      const select = document.createElement('select');
-
-      values.forEach((value) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
-        select.appendChild(option);
-      });
-
-      select.value = selectedOptions[optionIndex];
-
-      select.addEventListener('change', () => {
-        selectedOptions[optionIndex] = select.value;
-        updateVariant();
-      });
-
-      wrapper.append(label, select);
-      otherOptions.appendChild(wrapper);
-    };
-
-    const resetOptions = () => {
-      colorGroup.hidden = true;
-      sizeGroup.hidden = true;
-
-      colorOptions.innerHTML = '';
-      sizeSelect.innerHTML = '';
+    const createOtherOptions = () => {
       otherOptions.innerHTML = '';
+
+      activeProduct.options.forEach((optionName, index) => {
+        const lowerName = optionName.toLowerCase();
+
+        if (
+          lowerName.includes('color') ||
+          lowerName.includes('colour') ||
+          lowerName.includes('size')
+        ) {
+          return;
+        }
+
+        const values = [
+          ...new Set(activeProduct.variants.map((variant) =>
+            variant.options[index]
+          ))
+        ];
+
+        const group = document.createElement('div');
+        group.className = 'loomhaus-quick-view__option-group';
+
+        const label = document.createElement('label');
+        label.className = 'loomhaus-quick-view__option-label';
+        label.textContent = optionName.toUpperCase();
+
+        const select = document.createElement('select');
+        select.className = 'loomhaus-quick-view__select';
+
+        values.forEach((value) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+        selectedOptions[optionName] = values[0];
+
+        select.value = values[0];
+
+        select.addEventListener('change', () => {
+          selectedOptions[optionName] = select.value;
+          updateVariantState();
+        });
+
+        group.append(label, select);
+        otherOptions.appendChild(group);
+      });
+    };
+
+    const renderProduct = (product) => {
+      activeProduct = product;
+      selectedOptions = {};
+
+      title.textContent = product.title;
+      price.textContent = money(product.price);
+
+      description.textContent = product.description
+        ? product.description
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+        : '';
+
+      image.src = product.featured_image || product.images?.[0] || '';
+      image.alt = product.title;
+
+      if (productLink) {
+        productLink.href = product.url;
+      }
+
+      const names = product.options;
+      const colorIndex = getOptionIndex(names, ['color', 'colour']);
+      const sizeIndex = getOptionIndex(names, ['size']);
+
+      names.forEach((name, index) => {
+        if (index === colorIndex) {
+          const values = [
+            ...new Set(product.variants.map((variant) =>
+              variant.options[index]
+            ))
+          ];
+
+          const firstAvailable = product.variants.find(
+            (variant) => variant.available
+          );
+
+          selectedOptions[name] = firstAvailable
+            ? firstAvailable.options[index]
+            : values[0];
+
+          createColorOptions(name, values);
+        } else if (index === sizeIndex) {
+          selectedOptions[name] = '';
+        }
+      });
+
+      if (colorIndex === -1) {
+        colorGroup.hidden = true;
+      }
+
+      if (sizeIndex === -1) {
+        sizeGroup.hidden = true;
+      }
+
+      createOtherOptions();
+      updateSizeOptions();
+      updateVariantState();
     };
 
     const openModal = () => {
-      previousFocus = document.activeElement;
+      lastFocusedElement = document.activeElement;
 
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
-
       document.body.style.overflow = 'hidden';
 
-      modal.querySelector('.loomhaus-quick-view__close')?.focus();
+      panel?.focus();
     };
 
     const closeModal = () => {
       modal.classList.remove('is-open');
+      modal.classList.remove('is-loading');
       modal.setAttribute('aria-hidden', 'true');
-
       document.body.style.overflow = '';
 
       activeProduct = null;
 
-      if (previousFocus && typeof previousFocus.focus === 'function') {
-        previousFocus.focus();
+      if (lastFocusedElement) {
+        lastFocusedElement.focus();
       }
     };
 
     const loadProduct = async (url) => {
-      openModal();
-
-      title.textContent = '';
-      price.textContent = '';
-      description.textContent = 'Loading product...';
-
-      image.removeAttribute('src');
-
-      message.textContent = '';
+      message.textContent = 'Loading product...';
       addButton.disabled = true;
-      addButtonText.textContent = 'LOADING...';
 
-      resetOptions();
+      modal.classList.add('is-loading');
+      openModal();
 
       try {
         const response = await fetch(`${url}.js`);
@@ -298,71 +335,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const product = await response.json();
 
-        activeProduct = product;
+        renderProduct(product);
 
-        title.textContent = product.title;
-
-        description.textContent = product.description
-          ? product.description
-              .replace(/<[^>]*>/g, ' ')
-              .replace(/\s+/g, ' ')
-              .trim()
-          : '';
-
-        image.src = product.featured_image || product.images[0] || '';
-        image.alt = product.title;
-
-        selectedOptions = [...product.variants[0].options];
-
-        // Start with the first available variant.
-        const firstAvailable = product.variants.find(
-          (variant) => variant.available
-        );
-
-        if (firstAvailable) {
-          selectedOptions = [...firstAvailable.options];
-        }
-
-        product.options.forEach((optionName, index) => {
-          const type = optionType(optionName);
-
-          if (type === 'color') {
-            createColorOptions(product, index);
-          } else if (type === 'size') {
-            createSizeOptions(product, index);
-          } else {
-            createOtherOptions(product, index);
-          }
-        });
-
-        updateVariant();
-
+        modal.classList.remove('is-loading');
         message.textContent = '';
-
       } catch (error) {
         console.error(error);
-
-        description.textContent = '';
+        modal.classList.remove('is-loading');
         message.textContent = 'Unable to load product. Please try again.';
-
-        addButton.disabled = true;
-        addButtonText.textContent = 'ADD TO CART';
       }
     };
 
-    // Open quick view from hotspot.
+    // Open quick view
     section.querySelectorAll('[data-quick-view]').forEach((button) => {
       button.addEventListener('click', () => {
         loadProduct(button.dataset.productUrl);
       });
     });
 
-    // Close from close button and overlay.
+    // Close buttons and overlay
     modal.querySelectorAll('[data-quick-view-close]').forEach((button) => {
       button.addEventListener('click', closeModal);
     });
 
-    // Close using Escape.
+    // Close on Escape
     document.addEventListener('keydown', (event) => {
       if (
         event.key === 'Escape' &&
@@ -372,16 +368,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Add selected variant to cart without page reload.
-    addButton.addEventListener('click', async () => {
-      if (!activeProduct) return;
+    // Size selection
+    sizeSelect.addEventListener('change', () => {
+      const sizeIndex = getOptionIndex(activeProduct.options, ['size']);
 
+      if (sizeIndex === -1) return;
+
+      const sizeName = activeProduct.options[sizeIndex];
+      selectedOptions[sizeName] = sizeSelect.value;
+
+      updateVariantState();
+    });
+
+    // Add selected variant to cart without page reload
+    addButton.addEventListener('click', async () => {
       const variant = getSelectedVariant();
 
       if (!variant || !variant.available) return;
 
       addButton.disabled = true;
-      addButtonText.textContent = 'ADDING...';
+
+      if (addButtonText) {
+        addButtonText.textContent = 'ADDING...';
+      }
+
       message.textContent = '';
 
       try {
@@ -395,7 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({
             id: variant.id,
-            quantity: 1
+            quantity: 1,
+            sections: 'cart-drawer,cart-icon-bubble',
+            sections_url: window.location.pathname
           })
         });
 
@@ -407,38 +419,46 @@ document.addEventListener('DOMContentLoaded', () => {
           );
         }
 
-        // Notify the cart drawer and other cart components.
+        // Update Dawn cart drawer if it exists
+        const cartDrawer = document.querySelector('cart-drawer');
+
+        if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
+          cartDrawer.renderContents(result);
+        } else if (cartDrawer && typeof cartDrawer.open === 'function') {
+          cartDrawer.open();
+        }
+
+        // Notify a custom cart drawer
         document.dispatchEvent(
           new CustomEvent('cart:updated', {
             detail: result
           })
         );
 
-        // Close quick view.
-        closeModal();
+        document.dispatchEvent(
+          new CustomEvent('cart:open', {
+            detail: result
+          })
+        );
 
-        // Open the Dawn cart drawer if it exists.
-        const dawnCartDrawer = document.querySelector('cart-drawer');
-
-        if (dawnCartDrawer && typeof dawnCartDrawer.open === 'function') {
-          dawnCartDrawer.open();
+        if (addButtonText) {
+          addButtonText.textContent = 'ADDED TO CART';
         }
 
-        // Notify the custom Loomhaus cart drawer.
-        document.dispatchEvent(
-          new CustomEvent('cart:open')
-        );
+        message.textContent = 'Product added to cart.';
+
+        // Close quick view after successful add
+        closeModal();
 
       } catch (error) {
         console.error(error);
-
         message.textContent = error.message;
-
         addButton.disabled = false;
-        addButtonText.textContent = 'ADD TO CART';
+
+        if (addButtonText) {
+          addButtonText.textContent = 'ADD TO CART';
+        }
       }
     });
-
   });
-
 });
