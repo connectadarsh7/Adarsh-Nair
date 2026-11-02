@@ -1,0 +1,341 @@
+
+/* =====================================
+   LOOMHAUS HERO BANNER
+===================================== */
+
+.loomhaus-hero {
+  width: 100%;
+  background: #f5f2ec;
+  color: #292a27;
+  box-sizing: border-box;
+}
+
+.loomhaus-hero__container {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 460px;
+  margin: 0 auto;
+  padding: 55px 5%;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 70px;
+}
+
+/* Left content */
+
+.loomhaus-hero__content {
+  max-width: 440px;
+}
+
+.loomhaus-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  margin-bottom: 17px;
+
+  background: #7b806d;
+  color: #ffffff;
+  border-radius: 20px;
+
+  font-family: "Cabin", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.loomhaus-hero__heading {
+  max-width: 400px;
+  margin: 0 0 16px;
+
+  color: #292a27;
+  font-family: "Cabin", sans-serif;
+  font-size: clamp(42px, 4vw, 56px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -2px;
+}
+
+.loomhaus-hero__description {
+  max-width: 400px;
+  margin-bottom: 16px;
+
+  color: #73736c;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.loomhaus-hero__description p {
+  margin: 0;
+}
+
+/* Shop button */
+
+.loomhaus-hero__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  min-width: 108px;
+  padding: 9px 18px;
+  margin-top: 1px;
+
+  background: #292a27;
+  color: #ffffff;
+  border-radius: 30px;
+
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.loomhaus-hero__button:hover {
+  background: #494a44;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.loomhaus-hero__button span:last-child {
+  display: inline-block;
+  font-size: 16px;
+  transition: transform 0.25s ease;
+}
+
+.loomhaus-hero__button:hover span:last-child {
+  transform: translateX(4px);
+}
+
+/* Customer highlights */
+
+.loomhaus-hero__highlights {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  margin-top: 26px;
+}
+
+.loomhaus-hero__highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.loomhaus-hero__highlight strong {
+  color: #292a27;
+  font-family: "Cabin", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.loomhaus-hero__highlight span {
+  color: #77776f;
+  font-family: "Cabin", sans-serif;
+  font-size: 9px;
+}
+
+/* Right visual */
+
+.loomhaus-hero__visual {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  height: 350px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loomhaus-hero__visual::before {
+  content: "";
+  position: absolute;
+  width: 85%;
+  height: 90%;
+  right: 0;
+  top: 5%;
+
+  background: #e5dfd4;
+  border-radius: 50%;
+}
+
+.loomhaus-hero__image {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 75%;
+  height: 100%;
+  object-fit: cover;
+
+  border-radius: 180px 180px 18px 18px;
+}
+
+.loomhaus-hero__placeholder {
+  position: relative;
+  z-index: 1;
+  width: 75%;
+  height: 100%;
+  background: #e5dfd4;
+  border-radius: 180px 180px 18px 18px;
+}
+
+/* Floating product card */
+
+.loomhaus-hero__product-card {
+  position: absolute;
+  z-index: 2;
+  left: -8%;
+  bottom: 13%;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-width: 130px;
+  padding: 8px 10px;
+
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+
+  color: #292a27;
+  text-decoration: none;
+}
+
+.loomhaus-hero__product-image {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.loomhaus-hero__product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.loomhaus-hero__product-info strong {
+  font-family: "Cabin", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.loomhaus-hero__product-info span {
+  color: #77776f;
+  font-family: "Cabin", sans-serif;
+  font-size: 8px;
+}
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media screen and (min-width: 750px) and (max-width: 1050px) {
+  .loomhaus-hero__container {
+    gap: 35px;
+    padding: 45px 5%;
+  }
+
+  .loomhaus-hero__heading {
+    font-size: 45px;
+  }
+
+  .loomhaus-hero__visual {
+    height: 320px;
+  }
+
+  .loomhaus-hero__highlights {
+    gap: 20px;
+  }
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media screen and (max-width: 749px) {
+  .loomhaus-hero__container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 35px;
+
+    min-height: auto;
+    padding: 38px 22px 45px;
+  }
+
+  .loomhaus-hero__content {
+    max-width: 100%;
+  }
+
+  .loomhaus-hero__badge {
+    margin-bottom: 15px;
+    font-size: 8px;
+  }
+
+  .loomhaus-hero__heading {
+    max-width: 320px;
+    font-size: 44px;
+    letter-spacing: -1.5px;
+  }
+
+  .loomhaus-hero__description {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .loomhaus-hero__highlights {
+    gap: 25px;
+    margin-top: 25px;
+  }
+
+  .loomhaus-hero__highlight strong {
+    font-size: 15px;
+  }
+
+  .loomhaus-hero__highlight span {
+    font-size: 8px;
+  }
+
+  .loomhaus-hero__visual {
+    width: 100%;
+    max-width: 360px;
+    height: 330px;
+  }
+
+  .loomhaus-hero__image,
+  .loomhaus-hero__placeholder {
+    width: 78%;
+  }
+
+  .loomhaus-hero__product-card {
+    left: 0;
+    bottom: 12%;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .loomhaus-hero__heading {
+    font-size: 39px;
+  }
+
+  .loomhaus-hero__highlights {
+    gap: 17px;
+  }
+
+  .loomhaus-hero__visual {
+    height: 290px;
+  }
+}
