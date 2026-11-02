@@ -45,7 +45,6 @@
   display: block;
   margin-bottom: 8px;
   color: #777a67;
-
   font-family: "Lilita One", sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -58,7 +57,6 @@
 .loomhaus-lookbook__heading h2 {
   margin: 0;
   color: #292a27;
-
   font-family: "Bricolage Grotesque", sans-serif;
   font-size: 48px;
   font-weight: 800;
@@ -71,13 +69,11 @@
 .loomhaus-lookbook__helper {
   margin: 0 0 5px;
   color: #77776f;
-
   font-family: "Cabin", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
-
   text-align: right;
 }
 
@@ -169,6 +165,18 @@
   background: #777a67;
   color: #ffffff;
   transform: translate(-50%, -50%) scale(1.12);
+}
+
+/* Desktop hotspot: slightly higher */
+
+@media screen and (min-width: 750px) {
+  .loomhaus-lookbook__hotspot {
+    transform: translate(-50%, calc(-50% - 8px));
+  }
+
+  .loomhaus-lookbook__hotspot:hover {
+    transform: translate(-50%, calc(-50% - 8px)) scale(1.12);
+  }
 }
 
 /* =====================================
@@ -426,71 +434,100 @@
 }
 
 /* =====================================
-   MOBILE
+   MOBILE - FIGMA DESIGN
 ===================================== */
 
 @media screen and (max-width: 749px) {
   .loomhaus-lookbook {
-    padding: 38px 0;
+    padding: 30px 0 34px;
   }
 
   .loomhaus-lookbook__container {
-    padding: 0 18px;
+    padding: 0 14px;
   }
+
+  /* Heading */
 
   .loomhaus-lookbook__header {
     align-items: flex-start;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 18px;
+    gap: 8px;
+    margin-bottom: 17px;
   }
 
   .loomhaus-lookbook__eyebrow {
-    font-size: 12px;
+    margin-bottom: 7px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
   }
 
   .loomhaus-lookbook__heading h2 {
-    font-size: 29px;
+    font-size: 24px;
     line-height: 1.05;
+    letter-spacing: -0.5px;
   }
 
   .loomhaus-lookbook__helper {
-    text-align: left;
-    font-size: 13px;
-    line-height: 1.3;
+    display: none;
   }
+
+  /* Two-column product grid */
 
   .loomhaus-lookbook__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 9px;
   }
 
   .loomhaus-lookbook__tile {
-    aspect-ratio: 0.78;
-    border-radius: 12px;
+    aspect-ratio: 0.77;
+    border-radius: 11px;
   }
 
+  /* Mobile hotspot */
+
   .loomhaus-lookbook__hotspot {
-    width: 31px;
-    height: 31px;
+    width: 21px;
+    height: 21px;
+    transform: translate(-50%, -50%);
   }
 
   .loomhaus-lookbook__hotspot span {
-    font-size: 22px;
+    font-size: 16px;
+    line-height: 1;
   }
+
+  .loomhaus-lookbook__hotspot:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  /* Product name and price */
 
   .loomhaus-lookbook__label {
-    left: 7px;
-    bottom: 7px;
-    gap: 4px;
-    max-width: calc(100% - 14px);
+    left: 6px;
+    bottom: 6px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+
+    max-width: calc(100% - 12px);
     padding: 6px 8px;
-    font-size: 9px;
+    border-radius: 9px;
+
+    font-size: 8px;
+    line-height: 1.15;
   }
 
-  .loomhaus-lookbook__product-title,
+  .loomhaus-lookbook__product-title {
+    max-width: 100%;
+    font-size: 8px;
+    font-weight: 600;
+  }
+
   .loomhaus-lookbook__product-price {
-    font-size: 9px;
+    font-size: 8px;
+    font-weight: 700;
   }
 
   /* Quick view mobile bottom sheet */
@@ -532,11 +569,11 @@
   }
 
   .loomhaus-lookbook__heading h2 {
-    font-size: 26px;
+    font-size: 23px;
   }
 
   .loomhaus-lookbook__grid {
-    gap: 9px;
+    gap: 8px;
   }
 
   .loomhaus-lookbook__label {
