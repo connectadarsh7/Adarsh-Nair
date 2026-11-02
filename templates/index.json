@@ -97,11 +97,61 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "loomhaus_marquee_P98t4w": {
+      "type": "loomhaus-marquee",
+      "blocks": {
+        "marquee_item_8JFkWz": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Organic cotton"
+          }
+        },
+        "marquee_item_dp69Wx": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Made to last"
+          }
+        },
+        "marquee_item_4bBctw": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Sizes XS to L"
+          }
+        },
+        "marquee_item_MKLbYk": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Free returns"
+          }
+        },
+        "marquee_item_ApPJYn": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Ethically made"
+          }
+        }
+      },
+      "block_order": [
+        "marquee_item_8JFkWz",
+        "marquee_item_dp69Wx",
+        "marquee_item_4bBctw",
+        "marquee_item_MKLbYk",
+        "marquee_item_ApPJYn"
+      ],
+      "name": "Loomhaus marquee",
+      "settings": {
+        "background_color": "#777A67",
+        "text_color": "#FFFFFF",
+        "speed": 25,
+        "show_separator": true
+      }
     }
   },
   "order": [
     "image_banner",
     "loomhaus_hero_pU9xda",
+    "loomhaus_marquee_P98t4w",
     "featured_collection"
   ]
 }
