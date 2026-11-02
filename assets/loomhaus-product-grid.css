@@ -129,7 +129,7 @@
   position: absolute;
   z-index: 2;
   left: var(--hotspot-x, 50%);
-  top: var(--hotspot-y, 50%);
+  top: var(--hotspot-y, 40%);
   transform: translate(-50%, -50%);
 
   display: flex;
