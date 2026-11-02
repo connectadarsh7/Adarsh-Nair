@@ -1,0 +1,4 @@
+config.yml
+.env
+.shopify/
+node_modules/
