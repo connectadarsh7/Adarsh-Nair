@@ -81,28 +81,24 @@
         },
         "marquee_item_dp69Wx": {
           "type": "marquee_item",
-          "disabled": true,
           "settings": {
             "text": "Made to last"
           }
         },
         "marquee_item_4bBctw": {
           "type": "marquee_item",
-          "disabled": true,
           "settings": {
             "text": "Sizes XS to L"
           }
         },
         "marquee_item_MKLbYk": {
           "type": "marquee_item",
-          "disabled": true,
           "settings": {
             "text": "Free returns"
           }
         },
         "marquee_item_ApPJYn": {
           "type": "marquee_item",
-          "disabled": true,
           "settings": {
             "text": "Ethically made"
           }
