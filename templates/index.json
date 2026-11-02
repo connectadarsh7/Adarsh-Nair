@@ -153,7 +153,7 @@
           "settings": {
             "product": "blue-silk-tuxedo",
             "hotspot_x": 50,
-            "hotspot_y": 50
+            "hotspot_y": 40
           }
         },
         "look_TNWX6k": {
@@ -161,7 +161,7 @@
           "settings": {
             "product": "chequered-red-shirt",
             "hotspot_x": 50,
-            "hotspot_y": 50
+            "hotspot_y": 40
           }
         },
         "look_4BmPDX": {
@@ -169,7 +169,7 @@
           "settings": {
             "product": "classic-leather-jacket",
             "hotspot_x": 50,
-            "hotspot_y": 50
+            "hotspot_y": 40
           }
         },
         "look_cQeMfa": {
@@ -185,7 +185,7 @@
           "settings": {
             "product": "dark-denim-top",
             "hotspot_x": 50,
-            "hotspot_y": 50
+            "hotspot_y": 36
           }
         },
         "look_mHVejm": {
@@ -193,7 +193,7 @@
           "settings": {
             "product": "floral-white-top",
             "hotspot_x": 50,
-            "hotspot_y": 50
+            "hotspot_y": 35
           }
         }
       },
