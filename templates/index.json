@@ -118,6 +118,7 @@
     },
     "featured_collection": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "collection": "all",
         "products_to_show": 8,
@@ -143,12 +144,80 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "loomhaus_product_grid_YJerk7": {
+      "type": "loomhaus-product-grid",
+      "blocks": {
+        "look_xn63bm": {
+          "type": "look",
+          "settings": {
+            "product": "blue-silk-tuxedo",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        },
+        "look_TNWX6k": {
+          "type": "look",
+          "settings": {
+            "product": "chequered-red-shirt",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        },
+        "look_4BmPDX": {
+          "type": "look",
+          "settings": {
+            "product": "classic-leather-jacket",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        },
+        "look_cQeMfa": {
+          "type": "look",
+          "settings": {
+            "product": "classic-varsity-top",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        },
+        "look_jxg4Ud": {
+          "type": "look",
+          "settings": {
+            "product": "dark-denim-top",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        },
+        "look_mHVejm": {
+          "type": "look",
+          "settings": {
+            "product": "floral-white-top",
+            "hotspot_x": 50,
+            "hotspot_y": 50
+          }
+        }
+      },
+      "block_order": [
+        "look_xn63bm",
+        "look_TNWX6k",
+        "look_4BmPDX",
+        "look_cQeMfa",
+        "look_jxg4Ud",
+        "look_mHVejm"
+      ],
+      "name": "Loomhaus product grid",
+      "settings": {
+        "eyebrow": "SHOP THE LOOK",
+        "heading": "Loomhaus in the wild",
+        "helper_text": "Tap the + on any look to shop it."
+      }
     }
   },
   "order": [
     "image_banner",
     "loomhaus_hero_pU9xda",
     "loomhaus_marquee_P98t4w",
-    "featured_collection"
+    "featured_collection",
+    "loomhaus_product_grid_YJerk7"
   ]
 }
