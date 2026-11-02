@@ -56,6 +56,7 @@
     },
     "loomhaus_header_MDttVa": {
       "type": "loomhaus-header",
+      "disabled": true,
       "name": "Loomhaus header",
       "settings": {
         "announcement_text": "Free shipping on orders over ₹999",
@@ -64,10 +65,10 @@
         "tagline": "Clothes made to be worn for years, not seasons.",
         "button_label": "SHOP THE DROP",
         "button_link": "",
-        "header_background": "#F5F2EC",
-        "header_text_color": "#292A27",
-        "announcement_background": "#292A27",
-        "announcement_text_color": "#FFFFFF"
+        "header_background": "#f5f2ec",
+        "header_text_color": "#292a27",
+        "announcement_background": "#292a27",
+        "announcement_text_color": "#ffffff"
       }
     }
   },
