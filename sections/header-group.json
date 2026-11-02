@@ -63,16 +63,14 @@
       "type": "loomhaus-header",
       "name": "Loomhaus header",
       "settings": {
-        "announcement_text": "Free shipping on orders over ₹999",
-        "announcement_second_text": "Use code LOOM10 for 10% off your first order",
+        "logo": "shopify://shop_images/Logo.png",
         "logo_text": "Loomhaus",
         "tagline": "Clothes made to be worn for years, not seasons.",
         "button_label": "SHOP THE DROP",
         "button_link": "",
         "header_background": "#f5f2ec",
         "header_text_color": "#292a27",
-        "announcement_background": "#292a27",
-        "announcement_text_color": "#ffffff"
+        "border_color": "#d8d2c7"
       }
     }
   },
