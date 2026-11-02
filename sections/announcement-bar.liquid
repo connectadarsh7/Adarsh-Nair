@@ -1,10 +1,24 @@
+
 {{ 'custom-announcement-bar.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'custom-announcement-bar.js' | asset_url }}" defer="defer"></script>
 
-<div class="loomhaus-announcement" data-announcement-section="{{ section.id }}">
+<div
+  class="loomhaus-announcement"
+  data-announcement-section="{{ section.id }}"
+  style="
+    --announcement-bg: {{ section.settings.background_color }};
+    --announcement-text: {{ section.settings.text_color }};
+    --announcement-font-size: {{ section.settings.font_size }}px;
+    --announcement-mobile-font-size: {{ section.settings.mobile_font_size }}px;
+  "
+>
+  <!-- Desktop announcement layout -->
   <div class="loomhaus-announcement__desktop">
     {% for block in section.blocks %}
-      <div class="loomhaus-announcement__desktop-message" {{ block.shopify_attributes }}>
+      <div
+        class="loomhaus-announcement__desktop-message"
+        {{ block.shopify_attributes }}
+      >
         {% if block.settings.link != blank %}
           <a href="{{ block.settings.link }}">
             {{ block.settings.text | escape }}
@@ -15,17 +29,27 @@
       </div>
 
       {% unless forloop.last %}
-        <span class="loomhaus-announcement__separator" aria-hidden="true">✦</span>
+        <span
+          class="loomhaus-announcement__separator"
+          aria-hidden="true"
+        >✦</span>
       {% endunless %}
     {% endfor %}
   </div>
 
-  <div class="loomhaus-announcement__mobile" aria-live="polite" aria-atomic="true">
+  <!-- Mobile announcement slider -->
+  <div
+    class="loomhaus-announcement__mobile"
+    aria-live="polite"
+    aria-atomic="true"
+  >
     {% for block in section.blocks %}
       <div
         class="loomhaus-announcement__mobile-message{% if forloop.first %} is-active{% endif %}"
         data-announcement-slide
-        {% unless forloop.first %}aria-hidden="true"{% endunless %}
+        {% unless forloop.first %}
+          aria-hidden="true"
+        {% endunless %}
       >
         {% if block.settings.link != blank %}
           <a href="{{ block.settings.link }}">
@@ -43,7 +67,40 @@
 {
   "name": "Loomhaus announcement",
   "max_blocks": 2,
-  "settings": [],
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#1F1F1F"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Desktop font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    }
+  ],
   "blocks": [
     {
       "type": "announcement",

@@ -1,3 +1,4 @@
+
 /* =====================================
    LOOMHAUS ANNOUNCEMENT BAR
 ===================================== */
@@ -5,17 +6,24 @@
 .loomhaus-announcement {
   width: 100%;
   height: 36px;
+  min-height: 36px;
   padding: 10px 20px;
   box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1f1f1f;
-  color: #ffffff;
+
+  /* Shopify dashboard settings */
+  background-color: var(--announcement-bg, #1f1f1f);
+  color: var(--announcement-text, #ffffff);
+
   font-family: "Cabin", sans-serif;
 }
 
-/* Desktop layout */
+/* =====================================
+   DESKTOP LAYOUT
+===================================== */
 
 .loomhaus-announcement__desktop {
   display: flex;
@@ -26,9 +34,9 @@
 }
 
 .loomhaus-announcement__desktop-message {
-  color: #ffffff;
+  color: var(--announcement-text, #ffffff);
   font-family: "Cabin", sans-serif;
-  font-size: 13px;
+  font-size: var(--announcement-font-size, 13px);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;
@@ -41,33 +49,47 @@
   text-decoration: none;
 }
 
+.loomhaus-announcement__desktop-message a:hover,
+.loomhaus-announcement__mobile-message a:hover {
+  text-decoration: underline;
+}
+
+/* Desktop separator icon */
+
 .loomhaus-announcement__separator {
-  color: #ffffff;
+  color: var(--announcement-text, #ffffff);
   font-size: 12px;
   line-height: 1;
   flex-shrink: 0;
 }
 
-/* Mobile layout is hidden on desktop */
+/* =====================================
+   MOBILE LAYOUT
+===================================== */
 
 .loomhaus-announcement__mobile {
   display: none;
 }
 
 /* =====================================
-   MOBILE
+   MOBILE RESPONSIVE
 ===================================== */
 
 @media screen and (max-width: 749px) {
+
   .loomhaus-announcement {
     height: 33px;
     min-height: 33px;
     padding: 9px 12px;
   }
 
+  /* Hide desktop announcements and separator */
+
   .loomhaus-announcement__desktop {
     display: none;
   }
+
+  /* Mobile slider */
 
   .loomhaus-announcement__mobile {
     display: flex;
@@ -81,12 +103,14 @@
   .loomhaus-announcement__mobile-message {
     display: none;
     width: 100%;
-    color: #ffffff;
+
+    color: var(--announcement-text, #ffffff);
     font-family: "Cabin", sans-serif;
-    font-size: 13px;
+    font-size: var(--announcement-mobile-font-size, 13px);
     font-weight: 500;
     line-height: 1;
     letter-spacing: 0;
+
     text-align: center;
     white-space: nowrap;
   }
