@@ -41,7 +41,17 @@
           href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
         >
           <span>{{ section.settings.button_label | escape }}</span>
-          <span class="loomhaus-header__button-arrow" aria-hidden="true">→</span>
+
+          <!-- Custom Arrow Image -->
+          <span class="loomhaus-header__button-arrow" aria-hidden="true">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right.png?v=1793629424"
+              alt=""
+              width="16"
+              height="16"
+              style="display: block; object-fit: contain;"
+            >
+          </span>
         </a>
       {% endif %}
 
@@ -51,17 +61,16 @@
         href="{{ routes.cart_url }}"
         aria-label="Shopping cart, {{ cart.item_count }} items"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          aria-hidden="true"
+
+        <!-- Custom Cart Image -->
+        <img
+          src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/Frame.png?v=1793629308"
+          alt=""
+          class="loomhaus-header__cart-icon"
+          width="25"
+          height="25"
+          style="display: block; object-fit: contain;"
         >
-          <path d="M3 3h2l2.2 12.2a2 2 0 0 0 2 1.8h8.6a2 2 0 0 0 2-1.7L21 8H6" />
-          <circle cx="10" cy="20" r="1" />
-          <circle cx="18" cy="20" r="1" />
-        </svg>
 
         <span class="loomhaus-header__cart-count">
           {{ cart.item_count }}
