@@ -7,7 +7,6 @@
 >
   <div class="loomhaus-hero__container">
 
-    <!-- Left content -->
     <div class="loomhaus-hero__content">
 
       {% if section.settings.badge != blank %}
@@ -34,7 +33,6 @@
         </a>
       {% endif %}
 
-      <!-- Highlights -->
       <div class="loomhaus-hero__highlights">
 
         <div class="loomhaus-hero__highlight">
@@ -55,7 +53,6 @@
       </div>
     </div>
 
-    <!-- Right image -->
     <div class="loomhaus-hero__visual">
 
       {% if section.settings.hero_image != blank %}
@@ -71,7 +68,6 @@
         {{ 'lifestyle-1' | placeholder_svg_tag: 'loomhaus-hero__placeholder' }}
       {% endif %}
 
-      <!-- Floating product card -->
       {% assign featured_product = section.settings.featured_product %}
 
       {% if featured_product != blank %}
@@ -91,7 +87,9 @@
           {% endif %}
 
           <div class="loomhaus-hero__product-info">
-            <strong>{{ section.settings.product_card_title | default: featured_product.title | escape }}</strong>
+            <strong>
+              {{ section.settings.product_card_title | default: featured_product.title | escape }}
+            </strong>
             <span>{{ section.settings.product_card_subtitle | escape }}</span>
           </div>
         </a>

@@ -13,28 +13,31 @@
 .loomhaus-hero__container {
   width: 100%;
   max-width: 1440px;
-  min-height: 460px;
+  min-height: 620px;
   margin: 0 auto;
-  padding: 55px 5%;
+  padding: 65px 7%;
   box-sizing: border-box;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: 70px;
+  gap: 65px;
 }
 
-/* Left content */
+/* =====================================
+   LEFT CONTENT
+===================================== */
 
 .loomhaus-hero__content {
-  max-width: 440px;
+  width: 100%;
+  max-width: 460px;
 }
 
 .loomhaus-hero__badge {
   display: inline-flex;
   align-items: center;
   padding: 5px 11px;
-  margin-bottom: 17px;
+  margin-bottom: 20px;
 
   background: #7b806d;
   color: #ffffff;
@@ -46,25 +49,29 @@
   letter-spacing: 0.6px;
 }
 
+/* Heading */
+
 .loomhaus-hero__heading {
-  max-width: 400px;
-  margin: 0 0 16px;
+  max-width: 330px;
+  margin: 0 0 18px;
 
   color: #292a27;
   font-family: "Cabin", sans-serif;
-  font-size: clamp(42px, 4vw, 56px);
+  font-size: clamp(44px, 4.2vw, 58px);
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: -2px;
 }
 
+/* Description */
+
 .loomhaus-hero__description {
-  max-width: 400px;
-  margin-bottom: 16px;
+  max-width: 440px;
+  margin-bottom: 18px;
 
   color: #73736c;
   font-family: "Cabin", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.65;
 }
 
@@ -72,7 +79,9 @@
   margin: 0;
 }
 
-/* Shop button */
+/* =====================================
+   SHOP BUTTON
+===================================== */
 
 .loomhaus-hero__button {
   display: inline-flex;
@@ -81,7 +90,7 @@
   gap: 12px;
 
   min-width: 108px;
-  padding: 9px 18px;
+  padding: 10px 20px;
   margin-top: 1px;
 
   background: #292a27;
@@ -114,25 +123,27 @@
   transform: translateX(4px);
 }
 
-/* Customer highlights */
+/* =====================================
+   CUSTOMER HIGHLIGHTS
+===================================== */
 
 .loomhaus-hero__highlights {
   display: flex;
   align-items: flex-start;
   gap: 32px;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .loomhaus-hero__highlight {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 
 .loomhaus-hero__highlight strong {
   color: #292a27;
   font-family: "Cabin", sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -143,13 +154,15 @@
   font-size: 9px;
 }
 
-/* Right visual */
+/* =====================================
+   RIGHT IMAGE
+===================================== */
 
 .loomhaus-hero__visual {
   position: relative;
   width: 100%;
-  max-width: 430px;
-  height: 350px;
+  max-width: 480px;
+  height: 440px;
   margin: 0 auto;
 
   display: flex;
@@ -160,10 +173,10 @@
 .loomhaus-hero__visual::before {
   content: "";
   position: absolute;
-  width: 85%;
-  height: 90%;
+  width: 88%;
+  height: 88%;
   right: 0;
-  top: 5%;
+  top: 6%;
 
   background: #e5dfd4;
   border-radius: 50%;
@@ -174,9 +187,10 @@
   z-index: 1;
 
   display: block;
-  width: 75%;
+  width: 70%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 
   border-radius: 180px 180px 18px 18px;
 }
@@ -184,26 +198,28 @@
 .loomhaus-hero__placeholder {
   position: relative;
   z-index: 1;
-  width: 75%;
+  width: 70%;
   height: 100%;
   background: #e5dfd4;
   border-radius: 180px 180px 18px 18px;
 }
 
-/* Floating product card */
+/* =====================================
+   FLOATING PRODUCT CARD
+===================================== */
 
 .loomhaus-hero__product-card {
   position: absolute;
   z-index: 2;
-  left: -8%;
+  left: -5%;
   bottom: 13%;
 
   display: flex;
   align-items: center;
   gap: 9px;
 
-  min-width: 130px;
-  padding: 8px 10px;
+  min-width: 145px;
+  padding: 9px 11px;
 
   background: #ffffff;
   border-radius: 12px;
@@ -214,8 +230,8 @@
 }
 
 .loomhaus-hero__product-image {
-  width: 27px;
-  height: 27px;
+  width: 29px;
+  height: 29px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -244,20 +260,26 @@
 
 @media screen and (min-width: 750px) and (max-width: 1050px) {
   .loomhaus-hero__container {
+    min-height: 540px;
+    padding: 50px 5%;
     gap: 35px;
-    padding: 45px 5%;
   }
 
   .loomhaus-hero__heading {
+    max-width: 300px;
     font-size: 45px;
   }
 
   .loomhaus-hero__visual {
-    height: 320px;
+    height: 350px;
   }
 
   .loomhaus-hero__highlights {
     gap: 20px;
+  }
+
+  .loomhaus-hero__product-card {
+    left: -2%;
   }
 }
 
@@ -270,10 +292,10 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 35px;
+    gap: 30px;
 
     min-height: auto;
-    padding: 38px 22px 45px;
+    padding: 30px 22px 35px;
   }
 
   .loomhaus-hero__content {
@@ -281,24 +303,34 @@
   }
 
   .loomhaus-hero__badge {
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     font-size: 8px;
   }
 
   .loomhaus-hero__heading {
-    max-width: 320px;
-    font-size: 44px;
-    letter-spacing: -1.5px;
+    max-width: 300px;
+    margin-bottom: 14px;
+    font-size: 36px;
+    line-height: 0.98;
+    letter-spacing: -1.3px;
   }
 
   .loomhaus-hero__description {
     max-width: 100%;
+    margin-bottom: 15px;
     font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .loomhaus-hero__button {
+    width: 100%;
+    min-height: 40px;
+    box-sizing: border-box;
   }
 
   .loomhaus-hero__highlights {
     gap: 25px;
-    margin-top: 25px;
+    margin-top: 22px;
   }
 
   .loomhaus-hero__highlight strong {
@@ -312,23 +344,34 @@
   .loomhaus-hero__visual {
     width: 100%;
     max-width: 360px;
-    height: 330px;
+    height: 300px;
+    margin: 0 auto;
   }
 
   .loomhaus-hero__image,
   .loomhaus-hero__placeholder {
     width: 78%;
+    height: 100%;
   }
 
+  /* Figma mobile layout does not show the floating card */
   .loomhaus-hero__product-card {
-    left: 0;
-    bottom: 12%;
+    display: none;
   }
 }
 
+/* =====================================
+   SMALL MOBILE
+===================================== */
+
 @media screen and (max-width: 380px) {
+  .loomhaus-hero__container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
   .loomhaus-hero__heading {
-    font-size: 39px;
+    font-size: 34px;
   }
 
   .loomhaus-hero__highlights {
@@ -336,6 +379,6 @@
   }
 
   .loomhaus-hero__visual {
-    height: 290px;
+    height: 275px;
   }
 }
