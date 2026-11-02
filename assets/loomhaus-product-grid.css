@@ -251,101 +251,66 @@
   z-index: 9999;
   inset: 0;
   display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
 }
 
 .loomhaus-quick-view.is-open {
-  display: flex;
+  display: block;
 }
-
-/* Dark overlay */
 
 .loomhaus-quick-view__overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.48);
-  cursor: pointer;
 }
 
-/* Popup panel */
+/* Desktop popup */
 
 .loomhaus-quick-view__panel {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   width: 612px;
-  height: 385px;
-  max-width: 100%;
-  max-height: calc(100vh - 40px);
-
+  max-width: calc(100% - 32px);
+  min-height: 385px;
   padding: 24px;
 
-  background: #ffffff;
-  border-radius: 16px;
-
   overflow-y: auto;
-  box-sizing: border-box;
-
-  animation: loomhaus-popup-in 0.25s ease;
+  border-radius: 16px;
+  background: #ffffff;
 }
-
-@keyframes loomhaus-popup-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Close button */
 
 .loomhaus-quick-view__close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 5;
+  z-index: 3;
+  top: 13px;
+  right: 13px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 30px;
-  height: 30px;
-
+  width: 28px;
+  height: 28px;
   padding: 0;
-  border: 0;
-  border-radius: 50%;
 
+  border: 0;
   background: transparent;
   color: #292a27;
 
   font-family: Arial, sans-serif;
-  font-size: 23px;
+  font-size: 25px;
   font-weight: 400;
   line-height: 1;
 
   cursor: pointer;
 }
 
-.loomhaus-quick-view__close:hover {
-  background: #f5f2ec;
-}
-
-/* Main layout */
-
 .loomhaus-quick-view__content {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
   gap: 24px;
-
-  width: 100%;
-  height: 100%;
   align-items: stretch;
 }
 
@@ -354,7 +319,6 @@
 .loomhaus-quick-view__image-wrap {
   width: 240px;
   height: 337px;
-
   overflow: hidden;
   border-radius: 12px;
   background: #f5f2ec;
@@ -370,25 +334,26 @@
 /* Product details */
 
 .loomhaus-quick-view__details {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  align-items: stretch;
+  justify-content: flex-start;
   padding-top: 2px;
 }
 
-.loomhaus-quick-view__product-heading h2 {
+.loomhaus-quick-view__details h2 {
   margin: 0 28px 5px 0;
 
   color: #292a27;
   font-family: "Bricolage Grotesque", sans-serif;
   font-size: 22px;
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0;
+  line-height: 1.1;
 }
 
 .loomhaus-quick-view__price {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 
   color: #292a27;
   font-family: "Cabin", sans-serif;
@@ -397,10 +362,8 @@
   line-height: 1;
 }
 
-/* Description */
-
 .loomhaus-quick-view__description {
-  margin: 0 0 12px;
+  margin: 0 0 13px;
 
   color: #77776f;
   font-family: "Cabin", sans-serif;
@@ -409,10 +372,16 @@
   line-height: 1.5;
 }
 
-/* Option groups */
+/* Variant options */
+
+.loomhaus-quick-view__options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
 .loomhaus-quick-view__option-group {
-  margin-bottom: 10px;
+  width: 100%;
 }
 
 .loomhaus-quick-view__option-label {
@@ -425,104 +394,74 @@
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* Colour buttons */
 
-.loomhaus-quick-view__colors {
+.loomhaus-quick-view__color-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
-.loomhaus-quick-view__color {
+.loomhaus-quick-view__color-button {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 8px;
 
   min-width: 0;
-  height: 37px;
-  padding: 0 10px;
+  min-height: 36px;
+  padding: 7px 10px;
 
-  border: 1px solid #dedbd4;
+  border: 1px solid #e2ded5;
   border-radius: 7px;
-
   background: #ffffff;
   color: #292a27;
 
   font-family: "Cabin", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  text-align: left;
 
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.loomhaus-quick-view__color.is-selected {
-  border: 1.5px solid #292a27;
+.loomhaus-quick-view__color-button.is-selected {
+  border: 1px solid #292a27;
   background: #f5f2ec;
 }
 
-.loomhaus-quick-view__color:disabled {
-  opacity: 0.35;
+.loomhaus-quick-view__color-button:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .loomhaus-quick-view__color-dot {
-  display: inline-block;
-  flex-shrink: 0;
-
+  flex: 0 0 10px;
   width: 10px;
   height: 10px;
-
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 50%;
 }
 
-/* Size dropdown */
+/* Size and other option dropdowns */
 
 .loomhaus-quick-view__select {
   display: block;
   width: 100%;
-  height: 40px;
-
-  padding: 0 12px;
+  height: 38px;
+  padding: 0 10px;
 
   border: 1px solid #aaa9a3;
-  border-radius: 6px;
-
+  border-radius: 7px;
   background: #ffffff;
-  color: #292a27;
+  color: #55554f;
 
   font-family: "Cabin", sans-serif;
   font-size: 12px;
-
-  cursor: pointer;
 }
 
-/* Other options */
-
-.loomhaus-quick-view__other-options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.loomhaus-quick-view__other-options:empty {
-  display: none;
-}
-
-.loomhaus-quick-view__other-options select {
-  width: 100%;
-  height: 38px;
-  padding: 0 10px;
-  border: 1px solid #dedbd4;
-  border-radius: 6px;
-  background: #ffffff;
-}
-
-/* Add to cart button */
+/* Add to cart */
 
 .loomhaus-quick-view__add {
   display: flex;
@@ -531,14 +470,13 @@
   gap: 12px;
 
   width: 100%;
+  height: 45px;
   min-height: 45px;
-
-  margin-top: auto;
-  padding: 12px 20px;
+  margin-top: 12px;
+  padding: 0 20px;
 
   border: 0;
   border-radius: 8px;
-
   background: #292a27;
   color: #ffffff;
 
@@ -563,15 +501,13 @@
 
 .loomhaus-quick-view__arrow {
   display: block;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: auto;
   object-fit: contain;
 }
 
-/* Message */
-
 .loomhaus-quick-view__message {
-  min-height: 0;
+  min-height: 16px;
   margin: 5px 0 0;
 
   color: #777a67;
@@ -580,70 +516,72 @@
   line-height: 1.3;
 }
 
-.loomhaus-quick-view__message:empty {
-  display: none;
+/* =====================================
+   TABLET QUICK VIEW
+===================================== */
+
+@media screen and (min-width: 750px) and (max-width: 1050px) {
+  .loomhaus-quick-view__panel {
+    width: 612px;
+    max-width: calc(100% - 40px);
+  }
 }
 
 /* =====================================
-   MOBILE QUICK VIEW
+   MOBILE QUICK VIEW - FIGMA
 ===================================== */
 
 @media screen and (max-width: 749px) {
-
-  .loomhaus-quick-view {
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
-  }
-
   .loomhaus-quick-view__panel {
+    top: auto;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
     width: calc(100% - 30px);
-    height: auto;
-
     max-width: 420px;
-    max-height: 90vh;
+    max-height: 90dvh;
+    min-height: 0;
 
-    padding: 20px 14px 18px;
+    padding: 14px;
+    overflow-y: auto;
 
     border-radius: 16px 16px 0 0;
-    overflow-y: auto;
   }
 
   .loomhaus-quick-view__close {
-    top: 12px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
-    font-size: 22px;
+    top: 184px;
+    right: 10px;
+
+    width: 25px;
+    height: 25px;
+    font-size: 23px;
   }
 
   .loomhaus-quick-view__content {
     display: flex;
     flex-direction: column;
     gap: 12px;
-
-    height: auto;
   }
 
   .loomhaus-quick-view__image-wrap {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1.47;
-
+    height: 159px;
+    flex: 0 0 159px;
     border-radius: 9px;
   }
 
   .loomhaus-quick-view__image {
     object-fit: cover;
-    object-position: center;
   }
 
   .loomhaus-quick-view__details {
+    width: 100%;
     padding: 0;
   }
 
-  .loomhaus-quick-view__product-heading h2 {
-    margin: 0 28px 3px 0;
+  .loomhaus-quick-view__details h2 {
+    margin: 0 30px 4px 0;
     font-size: 16px;
     line-height: 1.2;
   }
@@ -659,48 +597,47 @@
     line-height: 1.45;
   }
 
-  .loomhaus-quick-view__option-group {
-    margin-bottom: 10px;
+  .loomhaus-quick-view__options {
+    gap: 10px;
   }
 
   .loomhaus-quick-view__option-label {
-    margin-bottom: 7px;
+    margin-bottom: 6px;
     font-size: 10px;
   }
 
-  .loomhaus-quick-view__colors {
-    gap: 8px;
+  .loomhaus-quick-view__color-options {
+    gap: 7px;
   }
 
-  .loomhaus-quick-view__color {
-    height: 29px;
-    padding: 0 9px;
-    gap: 7px;
+  .loomhaus-quick-view__color-button {
+    min-height: 30px;
+    padding: 5px 8px;
+    gap: 6px;
     font-size: 10px;
   }
 
   .loomhaus-quick-view__color-dot {
+    flex-basis: 9px;
     width: 9px;
     height: 9px;
   }
 
   .loomhaus-quick-view__select {
     height: 32px;
-    padding: 0 9px;
     font-size: 10px;
   }
 
   .loomhaus-quick-view__add {
+    height: 30px;
     min-height: 30px;
-    margin-top: 0;
-    padding: 8px 12px;
-    font-size: 10px;
+    margin-top: 10px;
     border-radius: 6px;
+    font-size: 10px;
   }
 
   .loomhaus-quick-view__arrow {
-    width: 15px;
-    height: 15px;
+    width: 14px;
   }
 
   .loomhaus-quick-view__message {
@@ -708,28 +645,203 @@
   }
 }
 
-/* Small mobile screens */
+/* =====================================
+   TABLET
+===================================== */
 
-@media screen and (max-width: 360px) {
-  .loomhaus-quick-view__panel {
-    padding: 16px 12px;
+@media screen and (min-width: 750px) and (max-width: 1050px) {
+  .loomhaus-lookbook__container {
+    padding: 0 5%;
   }
 
-  .loomhaus-quick-view__content {
-    gap: 10px;
+  .loomhaus-lookbook__heading h2 {
+    font-size: 38px;
   }
 
-  .loomhaus-quick-view__image-wrap {
-    aspect-ratio: 1.5;
+  .loomhaus-lookbook__grid {
+    gap: 15px;
+  }
+
+  .loomhaus-lookbook__tile {
+    border-radius: 16px;
+  }
+
+  .loomhaus-lookbook__label {
+    left: 8px;
+    bottom: 8px;
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .loomhaus-lookbook__product-title,
+  .loomhaus-lookbook__product-price {
+    font-size: 10px;
   }
 }
 
-/* Reduced motion */
+/* =====================================
+   MOBILE - FIGMA DESIGN
+===================================== */
+
+@media screen and (max-width: 749px) {
+  .loomhaus-lookbook {
+    padding: 30px 0 34px;
+  }
+
+  .loomhaus-lookbook__container {
+    padding: 0 14px;
+  }
+
+  /* Heading */
+
+  .loomhaus-lookbook__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 17px;
+  }
+
+  .loomhaus-lookbook__eyebrow {
+    margin-bottom: 7px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .loomhaus-lookbook__heading h2 {
+    font-size: 24px;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+  }
+
+  .loomhaus-lookbook__helper {
+    display: none;
+  }
+
+  /* Two-column product grid */
+
+  .loomhaus-lookbook__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .loomhaus-lookbook__tile {
+    aspect-ratio: 0.77;
+    border-radius: 11px;
+  }
+
+  /* Mobile hotspot */
+
+  .loomhaus-lookbook__hotspot {
+    width: 21px;
+    height: 21px;
+    transform: translate(-50%, -50%);
+  }
+
+  .loomhaus-lookbook__hotspot span {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .loomhaus-lookbook__hotspot:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  /* Product name and price */
+
+  .loomhaus-lookbook__label {
+    left: 6px;
+    bottom: 6px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+
+    max-width: calc(100% - 12px);
+    padding: 6px 8px;
+    border-radius: 9px;
+
+    font-size: 8px;
+    line-height: 1.15;
+  }
+
+  .loomhaus-lookbook__product-title {
+    max-width: 100%;
+    font-size: 8px;
+    font-weight: 600;
+  }
+
+  .loomhaus-lookbook__product-price {
+    font-size: 8px;
+    font-weight: 700;
+  }
+
+  /* Quick view mobile bottom sheet */
+
+  .loomhaus-quick-view__panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+
+    width: 100%;
+    max-height: 90vh;
+    padding: 22px 18px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .loomhaus-quick-view__content {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .loomhaus-quick-view__image-wrap {
+    max-height: 280px;
+    aspect-ratio: 1.2;
+  }
+
+  .loomhaus-quick-view__details h2 {
+    font-size: 24px;
+  }
+}
+
+/* =====================================
+   SMALL MOBILE
+===================================== */
+
+@media screen and (max-width: 380px) {
+  .loomhaus-lookbook__container {
+    padding: 0 14px;
+  }
+
+  .loomhaus-lookbook__heading h2 {
+    font-size: 23px;
+  }
+
+  .loomhaus-lookbook__grid {
+    gap: 8px;
+  }
+
+  .loomhaus-lookbook__label {
+    left: 5px;
+    bottom: 5px;
+    padding: 5px 6px;
+    gap: 3px;
+  }
+
+  .loomhaus-lookbook__product-title,
+  .loomhaus-lookbook__product-price {
+    font-size: 8px;
+  }
+}
+
+/* =====================================
+   REDUCED MOTION
+===================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .loomhaus-quick-view__panel,
-  .loomhaus-quick-view__add {
-    animation: none;
+  .loomhaus-lookbook__image,
+  .loomhaus-lookbook__hotspot {
     transition: none;
   }
 }
