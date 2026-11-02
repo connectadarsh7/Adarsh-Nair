@@ -1,58 +1,45 @@
 
-/* ==============================
+/* =====================================
    LOOMHAUS HEADER
-================================= */
+===================================== */
 
 .loomhaus-header {
   width: 100%;
-  background: {{ section.settings.header_background }};
-  color: {{ section.settings.header_text_color }};
+  height: 86px;
+  box-sizing: border-box;
+
+  background-color: var(--header-background, #F5F2EC);
+  color: var(--header-text, #292A27);
+
+  border-bottom: 1px solid var(--header-border, #D8D2C7);
 }
 
-/* Announcement bar */
-
-.loomhaus-announcement {
-  background: {{ section.settings.announcement_background }};
-  color: {{ section.settings.announcement_text_color }};
-  padding: 9px 15px;
-  font-size: 12px;
-  letter-spacing: 0.2px;
-}
-
-.loomhaus-announcement__inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-  text-align: center;
-}
-
-.loomhaus-announcement__star {
-  font-size: 13px;
-}
-
-/* Header layout */
+/* Main header layout */
 
 .loomhaus-header__inner {
-  max-width: 1440px;
-  min-height: 68px;
-  margin: 0 auto;
-  padding: 12px 5%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+
+  padding: 20px 100px;
+  gap: 30px;
 }
 
 /* Logo */
 
 .loomhaus-header__logo {
-  justify-self: start;
+  flex-shrink: 0;
   color: inherit;
   text-decoration: none;
+
+  font-family: "Cabin", sans-serif;
   font-size: 25px;
   font-weight: 700;
+  line-height: 1;
 }
 
 .loomhaus-header__logo-image {
@@ -67,9 +54,14 @@
 
 .loomhaus-header__tagline {
   margin: 0;
-  text-align: center;
-  font-size: 13px;
+  flex-shrink: 0;
+
+  color: inherit;
+  font-family: "Cabin", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
   line-height: 1.4;
+  text-align: center;
 }
 
 /* Header actions */
@@ -78,30 +70,38 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 18px;
+  flex-shrink: 0;
+  gap: 20px;
 }
 
-/* Header button */
+/* Shop the drop button */
 
 .loomhaus-header__button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
+
   padding: 12px 22px;
   border-radius: 30px;
-  background: #e8e4dc;
-  color: #292a27;
+
+  background-color: #E8E4DC;
+  color: #292A27;
+
   text-decoration: none;
+  font-family: "Cabin", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+
   transition:
     transform 0.25s ease,
-    background 0.25s ease;
+    background-color 0.25s ease;
 }
 
 .loomhaus-header__button:hover {
-  background: #dcd6ca;
+  background-color: #DCD6CA;
   transform: translateY(-2px);
 }
 
@@ -118,9 +118,11 @@
 
 .loomhaus-header__cart {
   position: relative;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   color: inherit;
   text-decoration: none;
 }
@@ -135,66 +137,136 @@
   position: absolute;
   top: -8px;
   right: -9px;
+
   min-width: 17px;
   height: 17px;
   padding: 0 4px;
+
   border-radius: 50%;
-  background: #292a27;
-  color: #ffffff;
+  background-color: #292A27;
+  color: #FFFFFF;
+
   font-size: 10px;
   line-height: 1;
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Mobile responsive */
+/* =====================================
+   TABLET
+===================================== */
+
+@media screen and (min-width: 750px) and (max-width: 1100px) {
+  .loomhaus-header__inner {
+    padding-left: 40px;
+    padding-right: 40px;
+    gap: 20px;
+  }
+
+  .loomhaus-header__tagline {
+    font-size: 12px;
+  }
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+/* =====================================
+   MOBILE HEADER
+===================================== */
 
 @media screen and (max-width: 749px) {
-  .loomhaus-announcement {
-    padding: 8px 10px;
-    font-size: 10px;
-  }
-
-  .loomhaus-announcement__inner {
-    gap: 7px;
-  }
 
   .loomhaus-header__inner {
-    grid-template-columns: 1fr auto;
-    min-height: 60px;
-    padding: 10px 18px;
-    gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    min-height: 54px;
+    padding: 0 18px;
+    margin: 0;
+
+    background: #F5F2EC;
+    border-bottom: 1px solid #D8D2C7;
+    box-sizing: border-box;
   }
 
+  /* Logo */
+
   .loomhaus-header__logo {
-    font-size: 21px;
+    font-family: "Cabin", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: #292A27;
+    text-decoration: none;
   }
 
   .loomhaus-header__logo-image {
     max-width: 145px;
-    max-height: 38px;
+    max-height: 35px;
+    object-fit: contain;
   }
+
+  /* Hide tagline */
 
   .loomhaus-header__tagline {
     display: none;
   }
 
+  /* Header actions */
+
   .loomhaus-header__actions {
-    gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0;
   }
+
+  /* Hide Shop the Drop button */
 
   .loomhaus-header__button {
     display: none;
   }
-}
 
-@media screen and (max-width: 380px) {
-  .loomhaus-announcement__inner {
-    gap: 5px;
+  /* Cart */
+
+  .loomhaus-header__cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #292A27;
   }
 
-  .loomhaus-announcement__star {
-    display: none;
+  .loomhaus-header__cart svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  /* Cart count */
+
+  .loomhaus-header__cart-count {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #73766A;
+    color: #FFFFFF;
+    border-radius: 50%;
+
+    font-size: 10px;
+    font-weight: 600;
   }
 }

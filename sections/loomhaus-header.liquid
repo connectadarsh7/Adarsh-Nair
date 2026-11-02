@@ -1,19 +1,18 @@
 
 {{ 'loomhaus-header.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'loomhaus-header.js' | asset_url }}" defer></script>
 
-<div class="loomhaus-header" id="LoomhausHeader-{{ section.id }}">
-  {% if section.settings.announcement_text != blank %}
-    <div class="loomhaus-announcement">
-      <div class="loomhaus-announcement__inner">
-        <span>{{ section.settings.announcement_text | escape }}</span>
-        <span class="loomhaus-announcement__star" aria-hidden="true">✦</span>
-        <span>{{ section.settings.announcement_second_text | escape }}</span>
-      </div>
-    </div>
-  {% endif %}
-
+<div
+  class="loomhaus-header"
+  id="LoomhausHeader-{{ section.id }}"
+  style="
+    --header-background: {{ section.settings.header_background }};
+    --header-text: {{ section.settings.header_text_color }};
+    --header-border: {{ section.settings.border_color }};
+  "
+>
   <div class="loomhaus-header__inner">
+
+    <!-- Logo -->
     <a class="loomhaus-header__logo" href="{{ routes.root_url }}">
       {% if section.settings.logo != blank %}
         {{
@@ -28,11 +27,14 @@
       {% endif %}
     </a>
 
+    <!-- Tagline -->
     <p class="loomhaus-header__tagline">
       {{ section.settings.tagline | escape }}
     </p>
 
+    <!-- Header actions -->
     <div class="loomhaus-header__actions">
+
       {% if section.settings.button_label != blank %}
         <a
           class="loomhaus-header__button"
@@ -43,6 +45,7 @@
         </a>
       {% endif %}
 
+      <!-- Cart -->
       <a
         class="loomhaus-header__cart"
         href="{{ routes.cart_url }}"
@@ -60,10 +63,11 @@
           <circle cx="18" cy="20" r="1" />
         </svg>
 
-        <span class="loomhaus-header__cart-count" data-cart-count>
+        <span class="loomhaus-header__cart-count">
           {{ cart.item_count }}
         </span>
       </a>
+
     </div>
   </div>
 </div>
@@ -72,18 +76,6 @@
 {
   "name": "Loomhaus header",
   "settings": [
-    {
-      "type": "text",
-      "id": "announcement_text",
-      "label": "Announcement message",
-      "default": "Free shipping on orders over ₹999"
-    },
-    {
-      "type": "text",
-      "id": "announcement_second_text",
-      "label": "Second announcement message",
-      "default": "Use code LOOM10 for 10% off your first order"
-    },
     {
       "type": "image_picker",
       "id": "logo",
@@ -126,15 +118,9 @@
     },
     {
       "type": "color",
-      "id": "announcement_background",
-      "label": "Announcement background",
-      "default": "#292A27"
-    },
-    {
-      "type": "color",
-      "id": "announcement_text_color",
-      "label": "Announcement text color",
-      "default": "#FFFFFF"
+      "id": "border_color",
+      "label": "Bottom border color",
+      "default": "#D8D2C7"
     }
   ],
   "presets": [
