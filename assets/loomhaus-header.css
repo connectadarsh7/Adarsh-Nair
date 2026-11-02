@@ -1,0 +1,200 @@
+
+/* ==============================
+   LOOMHAUS HEADER
+================================= */
+
+.loomhaus-header {
+  width: 100%;
+  background: {{ section.settings.header_background }};
+  color: {{ section.settings.header_text_color }};
+}
+
+/* Announcement bar */
+
+.loomhaus-announcement {
+  background: {{ section.settings.announcement_background }};
+  color: {{ section.settings.announcement_text_color }};
+  padding: 9px 15px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+.loomhaus-announcement__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.loomhaus-announcement__star {
+  font-size: 13px;
+}
+
+/* Header layout */
+
+.loomhaus-header__inner {
+  max-width: 1440px;
+  min-height: 68px;
+  margin: 0 auto;
+  padding: 12px 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Logo */
+
+.loomhaus-header__logo {
+  justify-self: start;
+  color: inherit;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.loomhaus-header__logo-image {
+  display: block;
+  width: auto;
+  max-width: 180px;
+  max-height: 45px;
+  object-fit: contain;
+}
+
+/* Tagline */
+
+.loomhaus-header__tagline {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Header actions */
+
+.loomhaus-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+/* Header button */
+
+.loomhaus-header__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  border-radius: 30px;
+  background: #e8e4dc;
+  color: #292a27;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.loomhaus-header__button:hover {
+  background: #dcd6ca;
+  transform: translateY(-2px);
+}
+
+.loomhaus-header__button-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.loomhaus-header__button:hover .loomhaus-header__button-arrow {
+  transform: translateX(4px);
+}
+
+/* Cart icon */
+
+.loomhaus-header__cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.loomhaus-header__cart svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.loomhaus-header__cart-count {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 50%;
+  background: #292a27;
+  color: #ffffff;
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile responsive */
+
+@media screen and (max-width: 749px) {
+  .loomhaus-announcement {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .loomhaus-announcement__inner {
+    gap: 7px;
+  }
+
+  .loomhaus-header__inner {
+    grid-template-columns: 1fr auto;
+    min-height: 60px;
+    padding: 10px 18px;
+    gap: 12px;
+  }
+
+  .loomhaus-header__logo {
+    font-size: 21px;
+  }
+
+  .loomhaus-header__logo-image {
+    max-width: 145px;
+    max-height: 38px;
+  }
+
+  .loomhaus-header__tagline {
+    display: none;
+  }
+
+  .loomhaus-header__actions {
+    gap: 12px;
+  }
+
+  .loomhaus-header__button {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .loomhaus-announcement__inner {
+    gap: 5px;
+  }
+
+  .loomhaus-announcement__star {
+    display: none;
+  }
+}

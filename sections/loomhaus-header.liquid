@@ -1,0 +1,146 @@
+
+{{ 'loomhaus-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'loomhaus-header.js' | asset_url }}" defer></script>
+
+<div class="loomhaus-header" id="LoomhausHeader-{{ section.id }}">
+  {% if section.settings.announcement_text != blank %}
+    <div class="loomhaus-announcement">
+      <div class="loomhaus-announcement__inner">
+        <span>{{ section.settings.announcement_text | escape }}</span>
+        <span class="loomhaus-announcement__star" aria-hidden="true">✦</span>
+        <span>{{ section.settings.announcement_second_text | escape }}</span>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="loomhaus-header__inner">
+    <a class="loomhaus-header__logo" href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 360
+          | image_tag:
+            class: 'loomhaus-header__logo-image',
+            alt: shop.name
+        }}
+      {% else %}
+        {{ section.settings.logo_text | escape }}
+      {% endif %}
+    </a>
+
+    <p class="loomhaus-header__tagline">
+      {{ section.settings.tagline | escape }}
+    </p>
+
+    <div class="loomhaus-header__actions">
+      {% if section.settings.button_label != blank %}
+        <a
+          class="loomhaus-header__button"
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+        >
+          <span>{{ section.settings.button_label | escape }}</span>
+          <span class="loomhaus-header__button-arrow" aria-hidden="true">→</span>
+        </a>
+      {% endif %}
+
+      <a
+        class="loomhaus-header__cart"
+        href="{{ routes.cart_url }}"
+        aria-label="Shopping cart, {{ cart.item_count }} items"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="M3 3h2l2.2 12.2a2 2 0 0 0 2 1.8h8.6a2 2 0 0 0 2-1.7L21 8H6" />
+          <circle cx="10" cy="20" r="1" />
+          <circle cx="18" cy="20" r="1" />
+        </svg>
+
+        <span class="loomhaus-header__cart-count" data-cart-count>
+          {{ cart.item_count }}
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Loomhaus header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement message",
+      "default": "Free shipping on orders over ₹999"
+    },
+    {
+      "type": "text",
+      "id": "announcement_second_text",
+      "label": "Second announcement message",
+      "default": "Use code LOOM10 for 10% off your first order"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Header tagline",
+      "default": "Clothes made to be worn for years, not seasons."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP THE DROP"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#F5F2EC"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header text color",
+      "default": "#292A27"
+    },
+    {
+      "type": "color",
+      "id": "announcement_background",
+      "label": "Announcement background",
+      "default": "#292A27"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Announcement text color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus header"
+    }
+  ]
+}
+{% endschema %}
