@@ -1,67 +1,70 @@
-
 /* =====================================
-   LOOMHAUS MARQUEE
+   LOOMHAUS INFINITE MARQUEE
 ===================================== */
 
 .loomhaus-marquee {
   width: 100%;
   height: 53px;
   overflow: hidden;
-  background: var(--marquee-background, #777A67);
-  color: var(--marquee-text, #ffffff);
+  background: #777A67;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 }
 
-.loomhaus-marquee__viewport {
-  width: 100%;
-  overflow: hidden;
-}
+/* Scrolling track */
 
 .loomhaus-marquee__track {
   display: flex;
   width: max-content;
-  animation: loomhaus-marquee-scroll var(--marquee-speed, 25s) linear infinite;
+  flex-shrink: 0;
+  animation: loomhaus-marquee-scroll var(--marquee-duration, 30s) linear infinite;
   will-change: transform;
 }
 
-.loomhaus-marquee__group {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 28px;
-  padding-right: 28px;
-}
+/* Pause when hovering */
 
-.loomhaus-marquee__item {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 28px;
-  white-space: nowrap;
-}
-
-.loomhaus-marquee__text {
-  font-family: "Cabin", sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.loomhaus-marquee__separator {
-  display: inline-block;
-  font-size: 14px;
-  line-height: 1;
-  color: #e9e5d9;
-}
-
-/* Pause on hover */
 .loomhaus-marquee:hover .loomhaus-marquee__track {
   animation-play-state: paused;
 }
 
-/* Infinite scrolling */
+/* Each duplicated group */
+
+.loomhaus-marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 28px;
+  padding-left: 24px;
+  padding-right: 28px;
+}
+
+/* Individual text item */
+
+.loomhaus-marquee__item {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  color: #ffffff;
+  font-family: "Cabin", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Decorative star */
+
+.loomhaus-marquee__star {
+  color: #e9e5d9;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Infinite animation */
+
 @keyframes loomhaus-marquee-scroll {
   from {
     transform: translateX(0);
@@ -72,30 +75,29 @@
   }
 }
 
-/* =====================================
-   MOBILE
-===================================== */
+/* Mobile */
 
 @media screen and (max-width: 749px) {
   .loomhaus-marquee {
     height: 53px;
   }
 
-  .loomhaus-marquee__group,
-  .loomhaus-marquee__item {
+  .loomhaus-marquee__group {
     gap: 20px;
   }
 
-  .loomhaus-marquee__text {
-    font-size: 17px;
+  .loomhaus-marquee__item {
+    gap: 20px;
+    font-size: 15px;
   }
 
-  .loomhaus-marquee__separator {
-    font-size: 13px;
+  .loomhaus-marquee__star {
+    font-size: 14px;
   }
 }
 
 /* Accessibility */
+
 @media (prefers-reduced-motion: reduce) {
   .loomhaus-marquee__track {
     animation: none;

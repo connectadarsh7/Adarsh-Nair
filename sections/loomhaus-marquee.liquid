@@ -1,45 +1,29 @@
-
 {{ 'loomhaus-marquee.css' | asset_url | stylesheet_tag }}
 
 <section
   class="loomhaus-marquee"
   id="LoomhausMarquee-{{ section.id }}"
-  style="
-    --marquee-background: {{ section.settings.background_color }};
-    --marquee-text: {{ section.settings.text_color }};
-    --marquee-speed: {{ section.settings.speed }}s;
-  "
+  style="--marquee-duration: {{ section.settings.speed }}s;"
 >
-  <div class="loomhaus-marquee__viewport">
-    <div class="loomhaus-marquee__track">
+  <div class="loomhaus-marquee__track">
 
-      {% for repeat in (1..2) %}
-        <div
-          class="loomhaus-marquee__group"
-          {% if repeat == 2 %}aria-hidden="true"{% endif %}
-        >
-          {% for block in section.blocks %}
-            <div
-              class="loomhaus-marquee__item"
-              {% if repeat == 1 %}
-                {{ block.shopify_attributes }}
-              {% endif %}
-            >
-              <span class="loomhaus-marquee__text">
-                {{ block.settings.text | escape }}
-              </span>
+    {% for repeat in (1..2) %}
+      <div
+        class="loomhaus-marquee__group"
+        {% if repeat == 2 %}aria-hidden="true"{% endif %}
+      >
+        {% for block in section.blocks %}
+          <div
+            class="loomhaus-marquee__item"
+            {{ block.shopify_attributes }}
+          >
+            <span>{{ block.settings.text | escape }}</span>
+            <span class="loomhaus-marquee__star" aria-hidden="true">✦</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
 
-              {% if section.settings.show_separator %}
-                <span class="loomhaus-marquee__separator" aria-hidden="true">
-                  ✦
-                </span>
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
-      {% endfor %}
-
-    </div>
   </div>
 </section>
 
@@ -48,18 +32,6 @@
   "name": "Loomhaus marquee",
   "settings": [
     {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background color",
-      "default": "#777A67"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text color",
-      "default": "#FFFFFF"
-    },
-    {
       "type": "range",
       "id": "speed",
       "label": "Scrolling speed",
@@ -67,13 +39,7 @@
       "max": 60,
       "step": 5,
       "unit": "s",
-      "default": 25
-    },
-    {
-      "type": "checkbox",
-      "id": "show_separator",
-      "label": "Show star separator",
-      "default": true
+      "default": 30
     }
   ],
   "blocks": [
@@ -90,7 +56,6 @@
       ]
     }
   ],
-  "max_blocks": 12,
   "presets": [
     {
       "name": "Loomhaus marquee",
