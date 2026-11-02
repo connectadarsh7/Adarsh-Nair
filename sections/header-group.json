@@ -35,7 +35,7 @@
       ],
       "settings": {
         "background_color": "#1f1f1f",
-        "text_color": "#FFFFFF",
+        "text_color": "#ffffff",
         "font_size": 13,
         "mobile_font_size": 13
       }
@@ -61,7 +61,6 @@
     },
     "loomhaus_header_MDttVa": {
       "type": "loomhaus-header",
-      "disabled": true,
       "name": "Loomhaus header",
       "settings": {
         "announcement_text": "Free shipping on orders over ₹999",
