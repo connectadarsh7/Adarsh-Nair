@@ -57,7 +57,7 @@
         "heading": "The Winter Edit",
         "description": "<p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>",
         "button_label": "SHOP NOW",
-        "button_link": "",
+        "button_link": "shopify://collections/all",
         "hero_image": "shopify://shop_images/Hero_lifestyle_photo.png",
         "featured_product": "yellow-wool-jumper",
         "product_card_title": "Yellow Wool Jumper",
