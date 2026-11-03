@@ -4,6 +4,12 @@
   @param {product} product - The product whose options and selected variant are rendered.
   @param {block} block - The variant-picker block and its picker settings.
   @param {string} product_form_id - The ID of the product form associated with the picker inputs.
+  @param {boolean} [featured_product] - Whether to render featured-product size ribbons.
+  @param {string} [ribbon_option_name] - Option name to decorate with featured-product ribbons.
+  @param {string} [most_ordered_value] - Option value that receives the most-ordered ribbon.
+  @param {string} [most_ordered_label] - Text for the most-ordered ribbon.
+  @param {string} [best_fit_value] - Option value that receives the best-fit ribbon.
+  @param {string} [best_fit_label] - Text for the best-fit ribbon.
   @param {object} [section] - The current product section context, supplied implicitly when rendered from that section and used to namespace picker controls.
 
   @example
@@ -34,7 +40,7 @@
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
+        <fieldset class="js product-form__input product-form__input--swatch" data-option-name="{{ option.name | downcase | escape }}">
           <legend class="form__label">
             {{ option.name }}:
             <span data-selected-value>
@@ -44,16 +50,28 @@
           {% render 'product-variant-options',
             option: option,
             block: block,
-            picker_type: picker_type
+            picker_type: picker_type,
+            featured_product: featured_product,
+            ribbon_option_name: ribbon_option_name,
+            most_ordered_value: most_ordered_value,
+            most_ordered_label: most_ordered_label,
+            best_fit_value: best_fit_value,
+            best_fit_label: best_fit_label
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
+        <fieldset class="js product-form__input product-form__input--pill" data-option-name="{{ option.name | downcase | escape }}">
           <legend class="form__label">{{ option.name }}</legend>
           {% render 'product-variant-options',
             option: option,
             block: block,
-            picker_type: picker_type
+            picker_type: picker_type,
+            featured_product: featured_product,
+            ribbon_option_name: ribbon_option_name,
+            most_ordered_value: most_ordered_value,
+            most_ordered_label: most_ordered_label,
+            best_fit_value: best_fit_value,
+            best_fit_label: best_fit_label
           %}
         </fieldset>
       {%- else -%}
@@ -79,7 +97,13 @@
               {% render 'product-variant-options',
                 option: option,
                 block: block,
-                picker_type: picker_type
+                picker_type: picker_type,
+                featured_product: featured_product,
+                ribbon_option_name: ribbon_option_name,
+                most_ordered_value: most_ordered_value,
+                most_ordered_label: most_ordered_label,
+                best_fit_value: best_fit_value,
+                best_fit_label: best_fit_label
               %}
             </select>
             <span class="svg-wrapper">

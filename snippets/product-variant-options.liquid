@@ -4,6 +4,12 @@
   @param {product_option} option - The product option whose values are rendered.
   @param {string} picker_type - The picker markup to render: `swatch`, `button`, `dropdown`, or `swatch_dropdown`.
   @param {block} [block] - The variant-picker block, required for swatch settings.
+  @param {boolean} [featured_product] - Whether to render featured-product size ribbons.
+  @param {string} [ribbon_option_name] - Option name to decorate with featured-product ribbons.
+  @param {string} [most_ordered_value] - Option value that receives the most-ordered ribbon.
+  @param {string} [most_ordered_label] - Text for the most-ordered ribbon.
+  @param {string} [best_fit_value] - Option value that receives the best-fit ribbon.
+  @param {string} [best_fit_label] - Text for the best-fit ribbon.
   @param {object} [section] - The current product section context, supplied implicitly when rendered from that section and used to namespace option inputs.
 
   @example
@@ -29,6 +35,16 @@
     assign option_disabled = true
     if value.available
       assign option_disabled = false
+    endif
+
+    assign option_value = value | append: ''
+    assign ribbon_label = blank
+    if featured_product and option.name == ribbon_option_name
+      if option_value == most_ordered_value
+        assign ribbon_label = most_ordered_label
+      elsif option_value == best_fit_value
+        assign ribbon_label = best_fit_label
+      endif
     endif
   -%}
 
@@ -88,8 +104,11 @@
       {% endif %}
       {{ input_dataset }}
     >
-    <label for="{{ input_id }}">
+    <label for="{{ input_id }}" data-option-value="{{ escaped_value | downcase | escape }}">
       {{ value -}}
+      {%- if ribbon_label != blank -%}
+        <span class="featured-product__size-ribbon">{{ ribbon_label | escape }}</span>
+      {%- endif -%}
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
