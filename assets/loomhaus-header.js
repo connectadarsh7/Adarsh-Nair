@@ -61,7 +61,48 @@
     await cartCountRequest;
   }
 
+  function watchCartRequests() {
+    if (window.loomhausCartRequestsObserved) return;
+
+    window.loomhausCartRequestsObserved = true;
+    const fetchCartRequest = window.fetch.bind(window);
+    const cartMutationPath = /\/cart\/(?:add|change|update|clear)(?:\.js)?$/;
+
+    window.fetch = (...args) => {
+      const requestUrl = args[0] instanceof Request ? args[0].url : args[0];
+      let isCartMutation = false;
+
+      try {
+        isCartMutation = cartMutationPath.test(new URL(requestUrl, window.location.href).pathname);
+      } catch (error) {
+        console.error('Loomhaus cart request URL error:', error);
+      }
+
+      const responsePromise = fetchCartRequest(...args);
+      if (!isCartMutation) return responsePromise;
+
+      return responsePromise.then((response) => {
+        if (response.ok) {
+          response.clone().json()
+            .then((cartData) => {
+              if (Number.isInteger(cartData.item_count)) {
+                renderCartCount(cartData.item_count);
+              } else {
+                updateCartCount();
+              }
+            })
+            .catch((error) => {
+              console.error('Loomhaus cart response error:', error);
+            });
+        }
+
+        return response;
+      });
+    };
+  }
+
   function initCartCount() {
+    watchCartRequests();
     updateCartCount();
 
     document.addEventListener('cart:updated', (event) => {
