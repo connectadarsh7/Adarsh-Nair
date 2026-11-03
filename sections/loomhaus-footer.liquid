@@ -14,7 +14,13 @@
     <div class="loomhaus-footer__brand">
       {% if section.settings.brand_name != blank %}
         <a class="loomhaus-footer__brand-name" href="{{ routes.root_url }}">
-          {{ section.settings.brand_name | escape }}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/Loomhaus.png?v=1793724872"
+            alt="{{ section.settings.brand_name | escape }}"
+            width="180"
+            height="42"
+            loading="lazy"
+          >
         </a>
       {% endif %}
 
