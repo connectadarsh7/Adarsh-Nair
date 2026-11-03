@@ -15,6 +15,7 @@
   {% assign offer_code_2 = featured_product.metafields.custom.offer_code_2.value %}
   {% assign offer_discount_1 = featured_product.metafields.custom.offer_discount_1.value | default: 10 %}
   {% assign offer_discount_2 = featured_product.metafields.custom.offer_discount_2.value | default: 15 %}
+  {% assign has_offer_blocks = false %}
 
   {% assign savings_percent = 0 %}
   {% if current_variant.compare_at_price > current_variant.price %}
@@ -27,9 +28,13 @@
     class="loomhaus-featured"
     data-featured-product
     data-section-id="{{ section.id }}"
-data-initial-variant="{{ current_variant.id }}"
-data-offer-discount-one="{{ offer_discount_1 }}"
-data-offer-discount-two="{{ offer_discount_2 }}"
+    data-initial-variant="{{ current_variant.id }}"
+    data-add-label="{{ section.settings.add_label | escape }}"
+    data-sold-out-label="{{ section.settings.sold_out_label | escape }}"
+    data-adding-label="{{ section.settings.adding_label | escape }}"
+    data-added-label="{{ section.settings.added_label | escape }}"
+    data-unavailable-label="{{ section.settings.unavailable_label | escape }}"
+    data-save-label="{{ section.settings.save_label | escape }}"
   >
     <script type="application/json" data-featured-product-json>
       {{ featured_product | json }}
@@ -73,7 +78,9 @@ data-offer-discount-two="{{ offer_discount_2 }}"
               class="loomhaus-featured__thumbnail{% if forloop.first %} is-active{% endif %}"
               data-thumbnail
               data-image-index="{{ forloop.index0 }}"
+              data-image-alt="{{ image.alt | default: featured_product.title | escape }}"
               aria-label="View product image {{ forloop.index }}"
+              aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
             >
               {{
                 image
@@ -91,19 +98,45 @@ data-offer-discount-two="{{ offer_discount_2 }}"
       <div class="loomhaus-featured__details">
 
         <div class="loomhaus-featured__topline">
-          {% if badge != blank %}
-            <span class="loomhaus-featured__badge">{{ badge | escape }}</span>
-          {% endif %}
+          {% assign has_badge_block = false %}
+          {% for block in section.blocks %}
+            {% if block.type == 'badge' and block.settings.text != blank %}
+              {% assign has_badge_block = true %}
+              <span class="loomhaus-featured__badge" {{ block.shopify_attributes }}>
+                {{ block.settings.text | escape }}
+              </span>
+            {% endif %}
+          {% endfor %}
+          {% unless has_badge_block %}
+            {% if badge != blank %}
+              <span class="loomhaus-featured__badge">{{ badge | escape }}</span>
+            {% endif %}
+          {% endunless %}
 
-          {% if rating != blank %}
-            <span class="loomhaus-featured__rating">
-              <span aria-hidden="true">★</span>
-              {{ rating }}
-              {% if review_count != blank %}
-                <span>({{ review_count }} Reviews)</span>
-              {% endif %}
-            </span>
-          {% endif %}
+          {% assign has_rating_block = false %}
+          {% for block in section.blocks %}
+            {% if block.type == 'rating' %}
+              {% assign has_rating_block = true %}
+              <span class="loomhaus-featured__rating" {{ block.shopify_attributes }}>
+                <span aria-hidden="true">★</span>
+                {{ block.settings.rating | escape }}
+                {% if block.settings.review_count != blank %}
+                  <span>({{ block.settings.review_count | escape }} Reviews)</span>
+                {% endif %}
+              </span>
+            {% endif %}
+          {% endfor %}
+          {% unless has_rating_block %}
+            {% if rating != blank %}
+              <span class="loomhaus-featured__rating">
+                <span aria-hidden="true">★</span>
+                {{ rating }}
+                {% if review_count != blank %}
+                  <span>({{ review_count }} Reviews)</span>
+                {% endif %}
+              </span>
+            {% endif %}
+          {% endunless %}
         </div>
 
         <h2 class="loomhaus-featured__title">
@@ -133,24 +166,45 @@ data-offer-discount-two="{{ offer_discount_2 }}"
           </span>
         </div>
 
-        <p class="loomhaus-featured__tax-note">
-          MRP inclusive of all taxes
-        </p>
+        {% if section.settings.tax_note != blank %}
+          <p class="loomhaus-featured__tax-note">
+            {{ section.settings.tax_note | escape }}
+          </p>
+        {% endif %}
 
         <!-- Highlight -->
-        {% if highlight_title != blank or highlight_text != blank %}
-          <div class="loomhaus-featured__highlight">
-            <span class="loomhaus-featured__highlight-icon" aria-hidden="true">✓</span>
-            <div>
-              {% if highlight_title != blank %}
-                <strong>{{ highlight_title | escape }}</strong>
-              {% endif %}
-              {% if highlight_text != blank %}
-                <p>{{ highlight_text | escape }}</p>
-              {% endif %}
+        {% assign has_highlight_block = false %}
+        {% for block in section.blocks %}
+          {% if block.type == 'highlight' %}
+            {% assign has_highlight_block = true %}
+            <div class="loomhaus-featured__highlight" {{ block.shopify_attributes }}>
+              <span class="loomhaus-featured__highlight-icon" aria-hidden="true">✓</span>
+              <div>
+                {% if block.settings.title != blank %}
+                  <strong>{{ block.settings.title | escape }}</strong>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <p>{{ block.settings.text | escape }}</p>
+                {% endif %}
+              </div>
             </div>
-          </div>
-        {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% unless has_highlight_block %}
+          {% if highlight_title != blank or highlight_text != blank %}
+            <div class="loomhaus-featured__highlight">
+              <span class="loomhaus-featured__highlight-icon" aria-hidden="true">✓</span>
+              <div>
+                {% if highlight_title != blank %}
+                  <strong>{{ highlight_title | escape }}</strong>
+                {% endif %}
+                {% if highlight_text != blank %}
+                  <p>{{ highlight_text | escape }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endunless %}
 
         <!-- Variant options -->
         <div class="loomhaus-featured__options" data-featured-options>
@@ -164,7 +218,7 @@ data-offer-discount-two="{{ offer_discount_2 }}"
             >
               <legend class="loomhaus-featured__option-label">
                 {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
-                  COLOR: <span data-selected-option>{{ current_variant.options[forloop.index0] }}</span>
+                  {{ option.name | upcase }}: <span data-selected-option>{{ current_variant.options[forloop.index0] }}</span>
                 {% else %}
                   {{ option.name | upcase }}
                 {% endif %}
@@ -186,6 +240,7 @@ data-offer-discount-two="{{ offer_discount_2 }}"
                       {% if current_variant.options[forloop.parentloop.index0] == value %}is-selected{% endif %}
                     "
                     data-option-value="{{ value | escape }}"
+                    aria-label="{{ option.name | escape }}: {{ value | escape }}"
                     aria-pressed="{% if current_variant.options[forloop.parentloop.index0] == value %}true{% else %}false{% endif %}"
                   >
                     {% if is_color_option %}
@@ -207,9 +262,15 @@ data-offer-discount-two="{{ offer_discount_2 }}"
                           {% endcase %}
                         "
                       ></span>
-                      <span>{{ value | escape }}</span>
                     {% else %}
                       {{ value | escape }}
+                      {% for block in section.blocks %}
+                        {% if block.type == 'size_label' and block.settings.size == value and block.settings.label != blank %}
+                          <span class="loomhaus-featured__size-label" {{ block.shopify_attributes }}>
+                            {{ block.settings.label | escape }}
+                          </span>
+                        {% endif %}
+                      {% endfor %}
                     {% endif %}
                   </button>
                 {% endfor %}
@@ -219,7 +280,13 @@ data-offer-discount-two="{{ offer_discount_2 }}"
         </div>
 
         <!-- Size ribbon -->
-        {% if size_ribbon != blank %}
+        {% assign has_size_label_blocks = false %}
+        {% for block in section.blocks %}
+          {% if block.type == 'size_label' and block.settings.label != blank %}
+            {% assign has_size_label_blocks = true %}
+          {% endif %}
+        {% endfor %}
+        {% if size_ribbon != blank and has_size_label_blocks == false %}
           <p class="loomhaus-featured__ribbon">{{ size_ribbon | escape }}</p>
         {% endif %}
 
@@ -231,6 +298,7 @@ data-offer-discount-two="{{ offer_discount_2 }}"
               type="number"
               value="1"
               min="1"
+              step="1"
               name="quantity"
               data-quantity-input
               aria-label="Quantity"
@@ -245,7 +313,7 @@ data-offer-discount-two="{{ offer_discount_2 }}"
             {% unless current_variant.available %}disabled{% endunless %}
           >
             <span data-featured-add-text>
-              {% if current_variant.available %}ADD TO CART{% else %}SOLD OUT{% endif %}
+              {% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ section.settings.sold_out_label | escape }}{% endif %}
             </span>
             <span aria-hidden="true">→</span>
           </button>
@@ -257,33 +325,74 @@ data-offer-discount-two="{{ offer_discount_2 }}"
           data-featured-buy
           {% unless current_variant.available %}disabled{% endunless %}
         >
-          BUY IT NOW
+          {{ section.settings.buy_label | escape }}
         </button>
 
         <!-- Offer cards -->
-        {% if offer_code_1 != blank or offer_code_2 != blank %}
+        {% for block in section.blocks %}
+          {% if block.type == 'offer' and block.settings.code != blank %}
+            {% assign has_offer_blocks = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if has_offer_blocks %}
+          <div class="loomhaus-featured__offers">
+            {% for block in section.blocks %}
+              {% if block.type == 'offer' and block.settings.code != blank %}
+                {% assign offer_multiplier = 100 | minus: block.settings.discount %}
+                {% assign offer_price = current_variant.price | times: offer_multiplier | divided_by: 100 %}
+                <div class="loomhaus-featured__offer" {{ block.shopify_attributes }}>
+                  <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
+                  <div>
+                    <strong data-offer-price data-offer-discount="{{ block.settings.discount }}">
+                      Get it for {{ offer_price | money }}
+                    </strong>
+                    <p>
+                      {% if block.settings.buy_two %}
+                        Buy 2, use code {{ block.settings.code | escape }} for {{ block.settings.discount }}% off
+                      {% else %}
+                        Use code {{ block.settings.code | escape }} for {{ block.settings.discount }}% off
+                      {% endif %}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    data-copy-code="{{ block.settings.code | escape }}"
+                    aria-label="Copy offer code {{ block.settings.code | escape }}"
+                  >▢</button>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% elsif offer_code_1 != blank or offer_code_2 != blank %}
           <div class="loomhaus-featured__offers">
             {% if offer_code_1 != blank %}
+              {% assign offer_multiplier_1 = 100 | minus: offer_discount_1 %}
+              {% assign offer_price_1 = current_variant.price | times: offer_multiplier_1 | divided_by: 100 %}
               <div class="loomhaus-featured__offer">
+                <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
                 <div>
-                  <strong data-offer-price-one>
-                    Get it for {{ current_variant.price | money }}
+                  <strong data-offer-price-one data-offer-discount="{{ offer_discount_1 }}">
+                    Get it for {{ offer_price_1 | money }}
                   </strong>
                   <p>Use code {{ offer_code_1 | escape }} for {{ offer_discount_1 }}% off</p>
                 </div>
-                <button type="button" data-copy-code="{{ offer_code_1 | escape }}" aria-label="Copy offer code">
+                <button type="button" data-copy-code="{{ offer_code_1 | escape }}" aria-label="Copy offer code {{ offer_code_1 | escape }}">
                   ▢
                 </button>
               </div>
             {% endif %}
 
             {% if offer_code_2 != blank %}
+              {% assign offer_multiplier_2 = 100 | minus: offer_discount_2 %}
+              {% assign offer_price_2 = current_variant.price | times: offer_multiplier_2 | divided_by: 100 %}
               <div class="loomhaus-featured__offer">
+                <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
                 <div>
-                  <strong data-offer-price-two>Get it for {{ current_variant.price | money }}</strong>
+                  <strong data-offer-price-two data-offer-discount="{{ offer_discount_2 }}">Get it for {{ offer_price_2 | money }}</strong>
                   <p>Buy 2, use code {{ offer_code_2 | escape }} for {{ offer_discount_2 }}% off</p>
                 </div>
-                <button type="button" data-copy-code="{{ offer_code_2 | escape }}" aria-label="Copy offer code">
+                <button type="button" data-copy-code="{{ offer_code_2 | escape }}" aria-label="Copy offer code {{ offer_code_2 | escape }}">
                   ▢
                 </button>
               </div>
@@ -311,11 +420,188 @@ data-offer-discount-two="{{ offer_discount_2 }}"
       "type": "product",
       "id": "product",
       "label": "Select product"
+    },
+    {
+      "type": "text",
+      "id": "tax_note",
+      "label": "Tax note",
+      "default": "MRP inclusive of all taxes"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add to cart label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "text",
+      "id": "buy_label",
+      "label": "Buy now label",
+      "default": "BUY IT NOW"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "SOLD OUT"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding label",
+      "default": "ADDING..."
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Added label",
+      "default": "ADDED TO CART"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Unavailable label",
+      "default": "UNAVAILABLE"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Savings label",
+      "default": "SAVE"
+    }
+  ],
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Product badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Badge text",
+          "default": "Loomhaus #1 Everyday Top"
+        }
+      ]
+    },
+    {
+      "type": "rating",
+      "name": "Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "rating",
+          "label": "Rating",
+          "default": "4.6"
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "Review count",
+          "default": "1,240+"
+        }
+      ]
+    },
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Keeps its shape after 50+ washes"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Heavyweight 320 GSM cotton, tested in our lab. See test results"
+        }
+      ]
+    },
+    {
+      "type": "size_label",
+      "name": "Size label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "size",
+          "label": "Variant value",
+          "default": "S"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Most Ordered"
+        }
+      ]
+    },
+    {
+      "type": "offer",
+      "name": "Offer card",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code",
+          "default": "LOOM10"
+        },
+        {
+          "type": "range",
+          "id": "discount",
+          "label": "Discount",
+          "min": 1,
+          "max": 90,
+          "step": 1,
+          "unit": "%",
+          "default": 10
+        },
+        {
+          "type": "checkbox",
+          "id": "buy_two",
+          "label": "Show a buy-two message",
+          "default": false
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Loomhaus featured product"
+      "name": "Loomhaus featured product",
+      "blocks": [
+        { "type": "badge" },
+        { "type": "rating" },
+        { "type": "highlight" },
+        {
+          "type": "size_label",
+          "settings": {
+            "size": "S",
+            "label": "Most Ordered"
+          }
+        },
+        {
+          "type": "size_label",
+          "settings": {
+            "size": "L",
+            "label": "Best Fit"
+          }
+        },
+        { "type": "offer" },
+        {
+          "type": "offer",
+          "settings": {
+            "code": "LOOM15",
+            "discount": 15,
+            "buy_two": true
+          }
+        }
+      ]
     }
   ]
 }
