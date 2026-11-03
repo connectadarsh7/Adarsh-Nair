@@ -211,6 +211,13 @@
         "heading": "Loomhaus in the wild",
         "helper_text": "Tap the + on any look to shop it."
       }
+    },
+    "loomhaus_featured_product_DLQFgL": {
+      "type": "loomhaus-featured-product",
+      "name": "Loomhaus featured product",
+      "settings": {
+        "product": "blue-silk-tuxedo"
+      }
     }
   },
   "order": [
@@ -218,6 +225,7 @@
     "loomhaus_hero_pU9xda",
     "loomhaus_marquee_P98t4w",
     "featured_collection",
-    "loomhaus_product_grid_YJerk7"
+    "loomhaus_product_grid_YJerk7",
+    "loomhaus_featured_product_DLQFgL"
   ]
 }
