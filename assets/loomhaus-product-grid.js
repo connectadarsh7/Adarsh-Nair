@@ -405,9 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({
             id: variant.id,
-            quantity: 1,
-            sections: 'cart-drawer,cart-icon-bubble',
-            sections_url: window.location.pathname
+            quantity: 1
           })
         });
 
@@ -419,16 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
           );
         }
 
-        // Update Dawn cart drawer if it exists
-        const cartDrawer = document.querySelector('cart-drawer');
-
-        if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
-          cartDrawer.renderContents(result);
-        } else if (cartDrawer && typeof cartDrawer.open === 'function') {
-          cartDrawer.open();
-        }
-
-        // Notify a custom cart drawer
+        // Notify the Loomhaus cart drawer.
         document.dispatchEvent(
           new CustomEvent('cart:updated', {
             detail: result
