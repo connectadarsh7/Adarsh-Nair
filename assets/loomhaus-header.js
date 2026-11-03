@@ -68,6 +68,12 @@
       updateCartCount(event.detail);
     });
 
+    document.addEventListener('loomhaus:cart:count', (event) => {
+      if (Number.isInteger(event.detail?.itemCount)) {
+        renderCartCount(event.detail.itemCount);
+      }
+    });
+
     if (
       typeof subscribe === 'function' &&
       typeof PUB_SUB_EVENTS !== 'undefined' &&
