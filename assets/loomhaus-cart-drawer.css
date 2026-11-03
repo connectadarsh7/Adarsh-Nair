@@ -41,11 +41,11 @@ body.loomhaus-cart-open {
 
 .loomhaus-cart__panel {
   position: absolute;
-  inset: 30px 10px 4px auto;
+  inset: 0 0 0 auto;
   display: flex;
   flex-direction: column;
-  width: min(420px, calc(100vw - 68px));
-  padding: 0 17px;
+  width: min(552px, 100vw);
+  padding: 0 22px;
   background: #fff;
   box-shadow: -8px 0 28px rgba(0, 0, 0, 0.12);
   transform: translateX(100%);
@@ -181,7 +181,7 @@ body.loomhaus-cart-open {
   flex: 0 0 auto;
   color: #292a27;
   font-family: "Cabin", sans-serif;
-  font-size: 11px !important;
+  font-size: 15px !important;
   font-weight: 600 !important;
   line-height: 1.4;
   white-space: nowrap;
@@ -210,23 +210,25 @@ body.loomhaus-cart-open {
 }
 
 .loomhaus-cart__quantity {
-  height: 21px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
-  border: 1px solid #d5d4d0;
+  border: 1px solid #ded9cf;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .loomhaus-cart__quantity button {
-  width: 19px;
-  height: 19px;
+  width: 32px;
+  height: 34px;
   border: 0;
   padding: 0;
-  color: inherit;
+  color: #c9c4ba;
   background: transparent;
   box-shadow: none;
   appearance: none;
   font: inherit;
-  font-size: 10px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -237,21 +239,24 @@ body.loomhaus-cart-open {
 }
 
 .loomhaus-cart__quantity-value {
-  min-width: 13px;
+  min-width: 26px;
+  color: #292a27;
   text-align: center;
-  font-size: 9px;
+  font-family: "Cabin", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .loomhaus-cart__remove {
   border: 0;
-  padding: 3px 2px;
-  color: #595954;
+  padding: 3px 4px;
+  color: #77786f;
   background: transparent;
   box-shadow: none;
   appearance: none;
   font-family: "Cabin", sans-serif;
-  font-size: 9px !important;
-  font-weight: 400;
+  font-size: 14px !important;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -340,8 +345,8 @@ body.loomhaus-cart-open {
 
 @media screen and (max-width: 749px) {
   .loomhaus-cart__panel {
-    inset: 34px 17px 4px auto;
-    width: min(420px, calc(100vw - 68px));
+    inset: 0;
+    width: 100vw;
     padding-right: 17px;
     padding-left: 17px;
   }
