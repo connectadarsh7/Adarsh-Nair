@@ -97,20 +97,20 @@ body.loomhaus-cart-open {
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
-  padding: 7px 0 14px;
+  padding: 8px 0 14px;
 }
 
 .loomhaus-cart__item {
   display: grid;
-  grid-template-columns: 59px minmax(0, 1fr);
-  gap: 10px;
-  padding: 7px 0;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 11px;
+  padding: 5px 0;
 }
 
 .loomhaus-cart__image-link {
   display: block;
-  width: 59px;
-  height: 70px;
+  width: 92px;
+  height: 110px;
   overflow: hidden;
   background: #f3f1ed;
 }
@@ -128,55 +128,77 @@ body.loomhaus-cart-open {
   flex-direction: column;
 }
 
+.loomhaus-cart__heading {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "title price";
+  align-items: start;
+  column-gap: 8px;
+}
+
+.loomhaus-cart__auto-label {
+  grid-area: badge;
+  justify-self: start;
+  margin: 0 0 3px;
+  border: 0;
+  border-radius: 2px;
+  padding: 2px 5px;
+  color: #292a27;
+  background: #e8e4dc;
+  font-family: "Cabin", sans-serif;
+  font-size: 8px !important;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+}
+
+.loomhaus-cart__heading--auto-added {
+  grid-template-areas:
+    "badge price"
+    "title price";
+}
+
 .loomhaus-cart__item-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
+  display: contents;
 }
 
 .loomhaus-cart__product-title {
+  grid-area: title;
+  min-width: 0;
   color: inherit;
   font-family: "Cabin", sans-serif;
-  font-size: 10px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   line-height: 1.35;
   text-decoration: none;
 }
 
 .loomhaus-cart__price {
+  grid-area: price;
+  align-self: start;
+  grid-row: 1;
   flex: 0 0 auto;
   color: #292a27;
   font-family: "Cabin", sans-serif;
-  font-size: 10px !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
   line-height: 1.4;
   white-space: nowrap;
 }
 
-.loomhaus-cart__variant {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px 9px;
-  margin-top: 2px;
-  color: #73736f;
-  font-family: "Cabin", sans-serif;
-  font-size: 9px !important;
-  font-weight: 400;
-  line-height: 1.35;
+.loomhaus-cart__heading--auto-added .loomhaus-cart__price {
+  grid-row: 1 / span 2;
 }
 
-.loomhaus-cart__auto-label {
-  align-self: flex-start;
-  margin-top: 2px;
-  padding: 1px 4px;
-  border: 1px solid #c9c7c1;
-  color: #4a4a46;
+.loomhaus-cart__variant {
+  display: block;
+  margin-top: 3px;
+  color: #73736f;
   font-family: "Cabin", sans-serif;
-  font-size: 7px !important;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.3px;
+  font-size: 10px !important;
+  font-weight: 400;
+  line-height: 1.35;
 }
 
 .loomhaus-cart__item-actions {
@@ -302,6 +324,13 @@ body.loomhaus-cart-open {
 
 .loomhaus-cart__checkout:hover {
   background: #444540;
+}
+
+.loomhaus-cart__checkout-arrow {
+  display: block;
+  width: 20px;
+  height: 12px;
+  object-fit: contain;
 }
 
 .loomhaus-cart__checkout[aria-disabled="true"] {

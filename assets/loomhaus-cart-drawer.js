@@ -157,27 +157,28 @@
     }
 
     const content = makeElement('div', 'loomhaus-cart__item-content');
+    const isAutoAdded = isAutoItem(item);
+    const heading = makeElement('div', 'loomhaus-cart__heading');
+
+    if (isAutoAdded) {
+      heading.classList.add('loomhaus-cart__heading--auto-added');
+      heading.appendChild(makeElement('span', 'loomhaus-cart__auto-label', 'AUTO-ADDED'));
+    }
+
     const top = makeElement('div', 'loomhaus-cart__item-top');
     const title = makeElement('a', 'loomhaus-cart__product-title', item.product_title);
     title.href = item.url || '#';
     const price = makeElement('span', 'loomhaus-cart__price', money(item.final_line_price));
     top.append(title, price);
-    content.appendChild(top);
+    heading.appendChild(top);
+    content.appendChild(heading);
 
     const options = (item.options_with_values || []).filter((option) => {
       return option.value && option.value !== 'Default Title';
     });
     if (options.length) {
-      const variant = makeElement('div', 'loomhaus-cart__variant');
-      options.forEach((option) => {
-        variant.appendChild(makeElement('span', '', `${option.name}: ${option.value}`));
-      });
-      content.appendChild(variant);
-    }
-
-    const isAutoAdded = isAutoItem(item);
-    if (isAutoAdded) {
-      content.appendChild(makeElement('span', 'loomhaus-cart__auto-label', 'AUTO-ADDED'));
+      const variantText = options.map((option) => option.value).join(' / ');
+      content.appendChild(makeElement('div', 'loomhaus-cart__variant', variantText));
     }
 
     const actions = makeElement('div', 'loomhaus-cart__item-actions');
