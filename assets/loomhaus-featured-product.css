@@ -6,6 +6,13 @@
   background: #f7f5ef;
   padding: 60px 5%;
   color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.loomhaus-featured * {
+  font-family: inherit;
 }
 
 .loomhaus-featured *,
@@ -138,15 +145,18 @@
   display: inline-block;
   background: #81866e;
   color: #fff;
-  padding: 5px 11px;
+  padding: 4px 9px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.2;
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .loomhaus-featured__rating {
   font-size: 12px;
+  line-height: 1.3;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -161,9 +171,10 @@
 .loomhaus-featured__title {
   margin: 0 0 12px;
   color: #292927;
-  font-size: clamp(27px, 3vw, 38px);
-  line-height: 1.15;
+  font-size: clamp(32px, 3.35vw, 48px);
+  line-height: 1.08;
   font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .loomhaus-featured__price-row {
@@ -174,13 +185,16 @@
 }
 
 .loomhaus-featured__price {
-  font-size: 21px;
+  font-size: 26px;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .loomhaus-featured__compare-price {
   color: #88857e;
-  font-size: 15px;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 400;
 }
 
 .loomhaus-featured__save {
@@ -189,13 +203,17 @@
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 10px;
+  line-height: 1.2;
   font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .loomhaus-featured__tax-note {
   margin: 4px 0 18px;
   color: #77766f;
-  font-size: 11px;
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 400;
 }
 
 /* Highlight */
@@ -227,14 +245,16 @@
 .loomhaus-featured__highlight strong {
   display: block;
   font-size: 12px;
-  font-weight: 700;
+  line-height: 1.3;
+  font-weight: 600;
 }
 
 .loomhaus-featured__highlight p {
   margin: 3px 0 0;
   color: #77766f;
   font-size: 10px;
-  line-height: 1.5;
+  line-height: 1.35;
+  font-weight: 400;
 }
 
 /* Options */
@@ -251,7 +271,13 @@
   margin-bottom: 10px;
   color: #44443f;
   font-size: 11px;
+  line-height: 1.3;
   font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.loomhaus-featured__option-label [data-selected-option] {
+  text-transform: uppercase;
 }
 
 .loomhaus-featured__option-values {
@@ -269,6 +295,8 @@
   background: #e7e3d9;
   color: #292927;
   font-size: 12px;
+  line-height: 1.2;
+  font-weight: 500;
   cursor: pointer;
   position: relative;
   transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
@@ -327,6 +355,7 @@
   background: #81866e;
   color: #fff;
   font-size: 10px;
+  line-height: 1.2;
   font-weight: 700;
 }
 
@@ -342,6 +371,7 @@
   font-size: 7px;
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: 0;
   white-space: nowrap;
   transform: translateX(-50%);
   pointer-events: none;
@@ -374,6 +404,8 @@
   background: transparent;
   color: #292927;
   font-size: 17px;
+  line-height: 1;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -386,6 +418,8 @@
   color: #292927;
   text-align: center;
   font-size: 13px;
+  line-height: 1.2;
+  font-weight: 400;
   appearance: textfield;
   -moz-appearance: textfield;
 }
@@ -407,8 +441,10 @@
   border: 1px solid #292927;
   border-radius: 6px;
   font-size: 11px;
-  font-weight: 700;
+  line-height: 1.2;
+  font-weight: 600;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -463,7 +499,9 @@
 
 .loomhaus-featured__offer strong {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 600;
 }
 
 .loomhaus-featured__offer-icon {
@@ -475,13 +513,15 @@
   border: 1px solid #292927;
   border-radius: 50%;
   font-size: 12px;
+  line-height: 1;
 }
 
 .loomhaus-featured__offer p {
   margin: 3px 0 0;
   color: #77766f;
-  font-size: 9px;
-  line-height: 1.4;
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 400;
 }
 
 .loomhaus-featured__offer button {
@@ -493,6 +533,7 @@
   background: transparent;
   color: #292927;
   font-size: 19px;
+  line-height: 1;
   cursor: pointer;
 }
 
@@ -500,6 +541,7 @@
   min-height: 18px;
   margin: 8px 0 0;
   font-size: 12px;
+  line-height: 1.4;
 }
 
 .loomhaus-featured__add[aria-busy='true'] {
@@ -511,6 +553,9 @@
 .loomhaus-featured__empty {
   padding: 40px;
   text-align: center;
+  font-family: "Cabin", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 /* Responsive */
@@ -542,11 +587,11 @@
   }
 
   .loomhaus-featured__title {
-    font-size: 25px;
+    font-size: 28px;
   }
 
   .loomhaus-featured__price {
-    font-size: 19px;
+    font-size: 21px;
   }
 
   .loomhaus-featured__offers {
