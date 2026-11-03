@@ -218,7 +218,7 @@
         "text_8pNkJG": {
           "type": "text",
           "settings": {
-            "text": "{{ section.settings.product.vendor }}",
+            "text": "&nbsp;Loomhaus #1 Everyday Top&nbsp;",
             "text_style": "uppercase"
           }
         },
@@ -266,6 +266,7 @@
         "buy_buttons_eiKLf7",
         "share_h8DLXy"
       ],
+      "disabled": true,
       "name": "t:sections.featured-product.presets.name",
       "settings": {
         "product": "olive-green-jacket",
