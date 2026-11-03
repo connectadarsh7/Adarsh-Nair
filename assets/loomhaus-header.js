@@ -1,49 +1,91 @@
+(() => {
+  if (window.loomhausCartCountInitialized) return;
+  window.loomhausCartCountInitialized = true;
 
-/* ==============================
-   LOOMHAUS HEADER JAVASCRIPT
-================================= */
+  let cartCountRequest;
+  let cartCountRefreshQueued = false;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const cartCountElements = document.querySelectorAll('[data-cart-count]');
-  const cartLinks = document.querySelectorAll('.loomhaus-header__cart');
+  function renderCartCount(itemCount) {
+    document.querySelectorAll('[data-cart-count]').forEach((element) => {
+      element.textContent = itemCount;
+    });
 
-  /**
-   * Fetch the latest cart information
-   * and update the cart count without reloading.
-   */
-  async function updateCartCount() {
-    try {
-      const response = await fetch(
-        `${window.Shopify.routes.root}cart.js`
-      );
-
-      if (!response.ok) {
-        throw new Error('Unable to fetch cart information');
-      }
-
-      const cart = await response.json();
-
-      cartCountElements.forEach((element) => {
-        element.textContent = cart.item_count;
-      });
-
-      cartLinks.forEach((link) => {
-        link.setAttribute(
-          'aria-label',
-          `Shopping cart, ${cart.item_count} items`
-        );
-      });
-    } catch (error) {
-      console.error('Loomhaus cart update error:', error);
-    }
+    document.querySelectorAll('.loomhaus-header__cart').forEach((link) => {
+      link.setAttribute('aria-label', `Shopping cart, ${itemCount} items`);
+    });
   }
 
-  // Get the latest cart count when the page loads.
-  updateCartCount();
+  async function updateCartCount(cartData) {
+    if (Number.isInteger(cartData?.item_count)) {
+      renderCartCount(cartData.item_count);
+      return;
+    }
 
-  // Allow other custom scripts to request a cart count refresh.
-  document.addEventListener('cart:updated', updateCartCount);
+    if (cartCountRequest) {
+      cartCountRefreshQueued = true;
+      await cartCountRequest;
+      return;
+    }
 
-  // Refresh when a visitor returns to the page.
-  window.addEventListener('pageshow', updateCartCount);
-});
+    const root = window.Shopify?.routes?.root || '/';
+    const shopRoot = root.endsWith('/') ? root : `${root}/`;
+
+    cartCountRequest = fetch(`${shopRoot}cart.js`, {
+      headers: { Accept: 'application/json' }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Unable to fetch the latest cart count.');
+        }
+
+        return response.json();
+      })
+      .then((cart) => {
+        if (!Number.isInteger(cart.item_count)) {
+          throw new Error('Cart response did not contain an item count.');
+        }
+
+        renderCartCount(cart.item_count);
+      })
+      .catch((error) => {
+        console.error('Loomhaus cart count update error:', error);
+      })
+      .finally(() => {
+        cartCountRequest = null;
+        if (cartCountRefreshQueued) {
+          cartCountRefreshQueued = false;
+          updateCartCount();
+        }
+      });
+
+    await cartCountRequest;
+  }
+
+  function initCartCount() {
+    updateCartCount();
+
+    document.addEventListener('cart:updated', (event) => {
+      updateCartCount(event.detail);
+    });
+
+    if (
+      typeof subscribe === 'function' &&
+      typeof PUB_SUB_EVENTS !== 'undefined' &&
+      PUB_SUB_EVENTS.cartUpdate
+    ) {
+      subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+        updateCartCount(event?.cartData);
+      });
+    }
+
+    window.addEventListener('pageshow', () => {
+      updateCartCount();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCartCount, { once: true });
+  } else {
+    initCartCount();
+  }
+})();
