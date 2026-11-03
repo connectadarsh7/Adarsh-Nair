@@ -19,6 +19,14 @@
       return;
     }
 
+    product.variants = product.variants.map((variant) => ({
+      ...variant,
+      options: Array.isArray(variant.options)
+        ? variant.options
+        : [variant.option1, variant.option2, variant.option3]
+          .filter((option) => option !== null && option !== undefined)
+    }));
+
     const mainImage = section.querySelector('.loomhaus-featured__image');
     const thumbnails = [...section.querySelectorAll('[data-thumbnail]')];
     const previousButton = section.querySelector('[data-gallery-prev]');
