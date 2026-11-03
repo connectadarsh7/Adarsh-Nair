@@ -1,0 +1,141 @@
+{{ 'loomhaus-footer.css' | asset_url | stylesheet_tag }}
+
+<footer
+  class="loomhaus-footer"
+  id="LoomhausFooter-{{ section.id }}"
+  style="
+    --loomhaus-footer-background: {{ section.settings.background_color }};
+    --loomhaus-footer-text: {{ section.settings.text_color }};
+    --loomhaus-footer-padding-top: {{ section.settings.padding_top }}px;
+    --loomhaus-footer-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="loomhaus-footer__inner">
+    <div class="loomhaus-footer__brand">
+      {% if section.settings.brand_name != blank %}
+        <a class="loomhaus-footer__brand-name" href="{{ routes.root_url }}">
+          {{ section.settings.brand_name | escape }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.tagline != blank %}
+        <p class="loomhaus-footer__tagline">{{ section.settings.tagline | escape }}</p>
+      {% endif %}
+    </div>
+
+    <div class="loomhaus-footer__menus">
+      {% if section.settings.shop_heading != blank %}
+        <nav class="loomhaus-footer__menu" aria-label="{{ section.settings.shop_heading | escape }}">
+          <h2 class="loomhaus-footer__menu-heading">{{ section.settings.shop_heading | escape }}</h2>
+          {% if section.settings.shop_menu != blank %}
+            <ul class="loomhaus-footer__menu-list" role="list">
+              {% for link in section.settings.shop_menu.links %}
+                <li>
+                  <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
+                    {{ link.title | escape }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </nav>
+      {% endif %}
+
+      {% if section.settings.help_heading != blank %}
+        <nav class="loomhaus-footer__menu" aria-label="{{ section.settings.help_heading | escape }}">
+          <h2 class="loomhaus-footer__menu-heading">{{ section.settings.help_heading | escape }}</h2>
+          {% if section.settings.help_menu != blank %}
+            <ul class="loomhaus-footer__menu-list" role="list">
+              {% for link in section.settings.help_menu.links %}
+                <li>
+                  <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
+                    {{ link.title | escape }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Loomhaus footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Clothes made to be worn for years, not seasons."
+    },
+    {
+      "type": "text",
+      "id": "shop_heading",
+      "label": "Shop menu heading",
+      "default": "SHOP"
+    },
+    {
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Shop menu"
+    },
+    {
+      "type": "text",
+      "id": "help_heading",
+      "label": "Help menu heading",
+      "default": "HELP"
+    },
+    {
+      "type": "link_list",
+      "id": "help_menu",
+      "label": "Help menu"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#292A27"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#F5F2EC"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 16,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 16,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus footer"
+    }
+  ]
+}
+{% endschema %}
