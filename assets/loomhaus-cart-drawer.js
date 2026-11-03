@@ -20,6 +20,7 @@
   let cartRequest = null;
   let isReconcilingAutoItem = false;
   let currentCart = null;
+  let returnScrollPosition = { x: 0, y: 0 };
 
   const money = (amount) => {
     const currency = window.Shopify?.currency?.active || 'INR';
@@ -263,6 +264,7 @@
   }
 
   async function openDrawer(trigger) {
+    returnScrollPosition = { x: window.scrollX, y: window.scrollY };
     activeTrigger = trigger || activeTrigger;
     drawer.classList.add('is-open');
     drawer.setAttribute('aria-hidden', 'false');
@@ -270,7 +272,8 @@
     document.querySelectorAll('[data-cart-drawer-trigger]').forEach((element) => {
       element.setAttribute('aria-expanded', 'true');
     });
-    panel.focus();
+    panel.focus({ preventScroll: true });
+    window.scrollTo(returnScrollPosition.x, returnScrollPosition.y);
     try {
       await getLatestCart();
     } catch (error) {
@@ -285,7 +288,16 @@
     document.querySelectorAll('[data-cart-drawer-trigger]').forEach((element) => {
       element.setAttribute('aria-expanded', 'false');
     });
-    if (activeTrigger?.isConnected) activeTrigger.focus();
+    if (activeTrigger?.isConnected) activeTrigger.focus({ preventScroll: true });
+    requestAnimationFrame(() => {
+      window.scrollTo(returnScrollPosition.x, returnScrollPosition.y);
+      requestAnimationFrame(() => {
+        window.scrollTo(returnScrollPosition.x, returnScrollPosition.y);
+      });
+    });
+    window.setTimeout(() => {
+      window.scrollTo(returnScrollPosition.x, returnScrollPosition.y);
+    }, 50);
   }
 
   async function changeItem(key, quantity, button) {
