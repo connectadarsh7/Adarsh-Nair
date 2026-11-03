@@ -17,9 +17,11 @@
         "brand_name": "Loomhaus",
         "tagline": "Clothes made to be worn for years, not seasons.",
         "shop_heading": "SHOP",
+        "shop_menu": "shop",
         "help_heading": "HELP",
-        "background_color": "#292A27",
-        "text_color": "#F5F2EC",
+        "help_menu": "help",
+        "background_color": "#292a27",
+        "text_color": "#f5f2ec",
         "padding_top": 40,
         "padding_bottom": 40
       }
