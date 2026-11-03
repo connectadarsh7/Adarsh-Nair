@@ -214,9 +214,70 @@
     },
     "loomhaus_featured_product_DLQFgL": {
       "type": "loomhaus-featured-product",
+      "blocks": {
+        "size_label_pqTAY7": {
+          "type": "size_label",
+          "settings": {
+            "size": "S",
+            "label": "Most Ordered"
+          }
+        },
+        "offer_gaQmPE": {
+          "type": "offer",
+          "settings": {
+            "code": "LOOM10",
+            "discount": 10,
+            "buy_two": false
+          }
+        },
+        "offer_gN63TD": {
+          "type": "offer",
+          "settings": {
+            "code": "LOOM10",
+            "discount": 10,
+            "buy_two": false
+          }
+        },
+        "rating_RBPWi8": {
+          "type": "rating",
+          "settings": {
+            "rating": "4.6",
+            "review_count": "1,240+"
+          }
+        },
+        "highlight_QEFihc": {
+          "type": "highlight",
+          "settings": {
+            "title": "Keeps its shape after 50+ washes",
+            "text": "Heavyweight 320 GSM cotton, tested in our lab. See test results"
+          }
+        },
+        "badge_DEiF4K": {
+          "type": "badge",
+          "settings": {
+            "text": "Loomhaus #1 Everyday Top"
+          }
+        }
+      },
+      "block_order": [
+        "size_label_pqTAY7",
+        "offer_gaQmPE",
+        "offer_gN63TD",
+        "rating_RBPWi8",
+        "highlight_QEFihc",
+        "badge_DEiF4K"
+      ],
       "name": "Loomhaus featured product",
       "settings": {
-        "product": "blue-silk-tuxedo"
+        "product": "blue-silk-tuxedo",
+        "tax_note": "MRP inclusive of all taxes",
+        "add_label": "ADD TO CART",
+        "buy_label": "BUY IT NOW",
+        "sold_out_label": "SOLD OUT",
+        "adding_label": "ADDING...",
+        "added_label": "ADDED TO CART",
+        "unavailable_label": "UNAVAILABLE",
+        "save_label": "SAVE"
       }
     }
   },
