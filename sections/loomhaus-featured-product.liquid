@@ -350,7 +350,14 @@
             <span data-featured-add-text>
               {% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ section.settings.sold_out_label | escape }}{% endif %}
             </span>
-            <span aria-hidden="true">→</span>
+            <img
+              class="loomhaus-featured__add-arrow"
+              src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right_ca1fffaa-fb25-4d69-9eaf-cbbbacfe05b0.png?v=1793638060"
+              alt=""
+              width="16"
+              height="16"
+              loading="lazy"
+            >
           </button>
         </div>
 

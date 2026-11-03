@@ -156,7 +156,7 @@
 .loomhaus-featured__rating {
   font-size: 12px;
   line-height: 1.3;
-  font-weight: 400;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -449,6 +449,14 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
+.loomhaus-featured__add-arrow {
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .loomhaus-featured__add {
   background: #292927;
   color: #fff;
@@ -497,11 +505,16 @@
   background: #e9e6dc;
 }
 
+.loomhaus-featured__offer > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .loomhaus-featured__offer strong {
   display: block;
   font-size: 12px;
   line-height: 1.3;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .loomhaus-featured__offer-icon {
@@ -535,6 +548,10 @@
   font-size: 19px;
   line-height: 1;
   cursor: pointer;
+}
+
+.loomhaus-featured__offer button.is-copied {
+  color: #81866e;
 }
 
 .loomhaus-featured__message {
@@ -600,5 +617,15 @@
 
   .loomhaus-featured__purchase-row {
     grid-template-columns: 95px minmax(0, 1fr);
+  }
+
+  .loomhaus-featured__add {
+    gap: 8px;
+  }
+
+  .loomhaus-featured__add-arrow {
+    flex-basis: 14px;
+    width: 14px;
+    height: 14px;
   }
 }

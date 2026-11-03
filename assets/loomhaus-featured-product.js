@@ -426,14 +426,16 @@
         const code = button.dataset.copyCode;
         if (!code) return;
 
-        const originalText = button.textContent;
+        const originalLabel = button.getAttribute('aria-label');
 
         try {
           await copyText(code);
-          button.textContent = 'COPIED';
+          button.classList.add('is-copied');
+          button.setAttribute('aria-label', `Offer code ${code} copied`);
           message.textContent = `Offer code ${code} copied.`;
           window.setTimeout(() => {
-            button.textContent = originalText;
+            button.classList.remove('is-copied');
+            if (originalLabel) button.setAttribute('aria-label', originalLabel);
           }, 1200);
         } catch (error) {
           console.error('Unable to copy discount code.', error);
