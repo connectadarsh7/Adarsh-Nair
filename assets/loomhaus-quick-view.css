@@ -245,7 +245,7 @@ div.loomhaus-quick-view__overlay {
   }
 
   .loomhaus-quick-view__panel {
-    width: calc(100% - 44px);
+    /* width: calc(100% - 44px); */
     max-width: 420px;
     min-height: 0;
     max-height: 90dvh;
