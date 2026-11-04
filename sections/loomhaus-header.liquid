@@ -1,0 +1,144 @@
+
+{{ 'loomhaus-header.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="loomhaus-header"
+  id="LoomhausHeader-{{ section.id }}"
+  style="
+    --header-background: {{ section.settings.header_background }};
+    --header-text: {{ section.settings.header_text_color }};
+    --header-border: {{ section.settings.border_color }};
+  "
+>
+  <div class="loomhaus-header__inner">
+
+    <!-- Logo -->
+    <a class="loomhaus-header__logo" href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 360
+          | image_tag:
+            class: 'loomhaus-header__logo-image',
+            alt: shop.name
+        }}
+      {% else %}
+        {{ section.settings.logo_text | escape }}
+      {% endif %}
+    </a>
+
+    <!-- Tagline -->
+    <p class="loomhaus-header__tagline">
+      {{ section.settings.tagline | escape }}
+    </p>
+
+    <!-- Header actions -->
+    <div class="loomhaus-header__actions">
+
+      {% if section.settings.button_label != blank %}
+        <a
+          class="loomhaus-header__button"
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+        >
+          <span>{{ section.settings.button_label | escape }}</span>
+
+          <!-- Custom Arrow Image -->
+          <span class="loomhaus-header__button-arrow" aria-hidden="true">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right.png?v=1793629424"
+              alt=""
+              width="16"
+              height="16"
+              style="display: block; object-fit: contain;"
+            >
+          </span>
+        </a>
+      {% endif %}
+
+      <!-- Cart -->
+      <a
+        class="loomhaus-header__cart"
+        href="{{ routes.cart_url }}"
+        aria-label="Shopping cart, {{ cart.item_count }} items"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        data-cart-drawer-trigger
+      >
+
+        <!-- Custom Cart Image -->
+        <img
+          src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/Frame.png?v=1793629308"
+          alt=""
+          class="loomhaus-header__cart-icon"
+          width="25"
+          height="25"
+          style="display: block; object-fit: contain;"
+        >
+
+        <span class="loomhaus-header__cart-count" data-cart-count>
+          {{ cart.item_count }}
+        </span>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Loomhaus header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Header tagline",
+      "default": "Clothes made to be worn for years, not seasons."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP THE DROP"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#F5F2EC"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header text color",
+      "default": "#292A27"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Bottom border color",
+      "default": "#D8D2C7"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus header"
+    }
+  ]
+}
+{% endschema %}

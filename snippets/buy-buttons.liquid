@@ -5,6 +5,7 @@
   @param {product} product - The product to purchase.
   @param {string} product_form_id - The product form's unique ID.
   @param {string} section_id - The section ID used to namespace the form and submit button.
+  @param {boolean} [featured_product] - Whether to add the featured-product button arrow.
   @param {boolean} [show_pickup_availability] - Whether to render pickup availability. Defaults to `false`.
   @param {object} [section] - The current section context, supplied implicitly when rendered from a section and used for IDs and pickup-availability colors.
 
@@ -94,6 +95,11 @@
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
             </span>
+            {%- if featured_product -%}
+              <span class="featured-product__add-arrow" aria-hidden="true">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            {%- endif -%}
             {%- render 'loading-spinner' -%}
           </button>
           {%- if show_dynamic_checkout -%}

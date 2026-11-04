@@ -1,0 +1,650 @@
+{{ 'loomhaus-featured-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'loomhaus-featured-product.js' | asset_url }}" defer="defer"></script>
+
+{% assign featured_product = section.settings.product %}
+
+{% if featured_product != blank %}
+  {% assign current_variant = featured_product.selected_or_first_available_variant %}
+  {% assign badge = featured_product.metafields.custom.badge.value %}
+  {% assign rating = featured_product.metafields.custom.rating.value %}
+  {% assign review_count = featured_product.metafields.custom.review_count.value %}
+  {% assign highlight_title = featured_product.metafields.custom.highlight_title.value %}
+  {% assign highlight_text = featured_product.metafields.custom.highlight_text.value %}
+  {% assign size_ribbon = featured_product.metafields.custom.size_ribbon.value %}
+  {% assign offer_code_1 = featured_product.metafields.custom.offer_code_1.value %}
+  {% assign offer_code_2 = featured_product.metafields.custom.offer_code_2.value %}
+  {% assign offer_discount_1 = featured_product.metafields.custom.offer_discount_1.value | default: 10 %}
+  {% assign offer_discount_2 = featured_product.metafields.custom.offer_discount_2.value | default: 15 %}
+  {% assign has_offer_blocks = false %}
+
+  {% assign savings_percent = 0 %}
+  {% if current_variant.compare_at_price > current_variant.price %}
+    {% assign savings = current_variant.compare_at_price | minus: current_variant.price %}
+    {% assign savings_percent = savings | times: 100.0 | divided_by: current_variant.compare_at_price | round %}
+  {% endif %}
+
+  <section
+    id="LoomhausFeatured-{{ section.id }}"
+    class="loomhaus-featured"
+    data-featured-product
+    data-section-id="{{ section.id }}"
+    data-initial-variant="{{ current_variant.id }}"
+    data-add-label="{{ section.settings.add_label | escape }}"
+    data-sold-out-label="{{ section.settings.sold_out_label | escape }}"
+    data-adding-label="{{ section.settings.adding_label | escape }}"
+    data-added-label="{{ section.settings.added_label | escape }}"
+    data-unavailable-label="{{ section.settings.unavailable_label | escape }}"
+    data-save-label="{{ section.settings.save_label | escape }}"
+  >
+    <script type="application/json" data-featured-product-json>
+      {
+        "id": {{ featured_product.id | json }},
+        "title": {{ featured_product.title | json }},
+        "options": [
+          {% for option in featured_product.options %}
+            {{ option | json }}{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "images": [
+          {% for image in featured_product.images %}
+            {{ image | image_url: width: 1400 | json }}{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "variants": [
+          {% for variant in featured_product.variants %}
+            {
+              "id": {{ variant.id | json }},
+              "available": {{ variant.available | json }},
+              "price": {{ variant.price | json }},
+              "compare_at_price": {{ variant.compare_at_price | default: 0 | json }},
+              "options": [
+                {% for option_value in variant.options %}
+                  {{ option_value | json }}{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ],
+              "featured_image": {% if variant.featured_image != blank %}
+                {
+                  "src": {{ variant.featured_image | image_url: width: 1400 | json }}
+                }
+              {% else %}
+                null
+              {% endif %}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }
+    </script>
+
+    <div class="loomhaus-featured__container">
+
+      <!-- Product gallery -->
+      <div class="loomhaus-featured__gallery">
+        <div class="loomhaus-featured__main-image">
+          {% if featured_product.featured_image %}
+            {{
+              featured_product.featured_image
+              | image_url: width: 1400
+              | image_tag:
+                class: 'loomhaus-featured__image',
+                loading: 'lazy',
+                alt: featured_product.featured_image.alt
+            }}
+          {% endif %}
+
+          <button
+            type="button"
+            class="loomhaus-featured__arrow loomhaus-featured__arrow--prev"
+            data-gallery-prev
+            aria-label="Previous image"
+          >‹</button>
+
+          <button
+            type="button"
+            class="loomhaus-featured__arrow loomhaus-featured__arrow--next"
+            data-gallery-next
+            aria-label="Next image"
+          >›</button>
+        </div>
+
+        <div class="loomhaus-featured__thumbnails" data-gallery-thumbnails>
+          {% for image in featured_product.images %}
+            <button
+              type="button"
+              class="loomhaus-featured__thumbnail{% if forloop.first %} is-active{% endif %}"
+              data-thumbnail
+              data-image-index="{{ forloop.index0 }}"
+              data-image-alt="{{ image.alt | default: featured_product.title | escape }}"
+              aria-label="View product image {{ forloop.index }}"
+              aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+            >
+              {{
+                image
+                | image_url: width: 180
+                | image_tag:
+                  loading: 'lazy',
+                  alt: image.alt
+              }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Product information -->
+      <div class="loomhaus-featured__details">
+
+        <div class="loomhaus-featured__topline">
+          {% assign has_badge_block = false %}
+          {% for block in section.blocks %}
+            {% if block.type == 'badge' and block.settings.text != blank %}
+              {% assign has_badge_block = true %}
+              <span class="loomhaus-featured__badge" {{ block.shopify_attributes }}>
+                {{ block.settings.text | escape }}
+              </span>
+            {% endif %}
+          {% endfor %}
+          {% unless has_badge_block %}
+            {% if badge != blank %}
+              <span class="loomhaus-featured__badge">{{ badge | escape }}</span>
+            {% endif %}
+          {% endunless %}
+
+          {% assign has_rating_block = false %}
+          {% for block in section.blocks %}
+            {% if block.type == 'rating' %}
+              {% assign has_rating_block = true %}
+              <span class="loomhaus-featured__rating" {{ block.shopify_attributes }}>
+                <span aria-hidden="true">★</span>
+                {{ block.settings.rating | escape }}
+                {% if block.settings.review_count != blank %}
+                  <span>({{ block.settings.review_count | escape }} Reviews)</span>
+                {% endif %}
+              </span>
+            {% endif %}
+          {% endfor %}
+          {% unless has_rating_block %}
+            {% if rating != blank %}
+              <span class="loomhaus-featured__rating">
+                <span aria-hidden="true">★</span>
+                {{ rating }}
+                {% if review_count != blank %}
+                  <span>({{ review_count }} Reviews)</span>
+                {% endif %}
+              </span>
+            {% endif %}
+          {% endunless %}
+        </div>
+
+        <h2 class="loomhaus-featured__title">
+          {{ featured_product.title | escape }}
+        </h2>
+
+        <!-- Price -->
+        <div class="loomhaus-featured__price-row">
+          <span class="loomhaus-featured__price" data-featured-price>
+            {{ current_variant.price | money }}
+          </span>
+
+          <s
+            class="loomhaus-featured__compare-price"
+            data-featured-compare
+            {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}
+          >
+            {{ current_variant.compare_at_price | money }}
+          </s>
+
+          <span
+            class="loomhaus-featured__save"
+            data-featured-save
+            {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}
+          >
+            SAVE {{ savings_percent }}%
+          </span>
+        </div>
+
+        {% if section.settings.tax_note != blank %}
+          <p class="loomhaus-featured__tax-note">
+            {{ section.settings.tax_note | escape }}
+          </p>
+        {% endif %}
+
+        <!-- Highlight -->
+        {% assign has_highlight_block = false %}
+        {% for block in section.blocks %}
+          {% if block.type == 'highlight' %}
+            {% assign has_highlight_block = true %}
+            <div class="loomhaus-featured__highlight" {{ block.shopify_attributes }}>
+              <span class="loomhaus-featured__highlight-icon" aria-hidden="true">✓</span>
+              <div>
+                {% if block.settings.title != blank %}
+                  <strong>{{ block.settings.title | escape }}</strong>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <p>{{ block.settings.text | escape }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% unless has_highlight_block %}
+          {% if highlight_title != blank or highlight_text != blank %}
+            <div class="loomhaus-featured__highlight">
+              <span class="loomhaus-featured__highlight-icon" aria-hidden="true">✓</span>
+              <div>
+                {% if highlight_title != blank %}
+                  <strong>{{ highlight_title | escape }}</strong>
+                {% endif %}
+                {% if highlight_text != blank %}
+                  <p>{{ highlight_text | escape }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endunless %}
+
+        <!-- Variant options -->
+        <div class="loomhaus-featured__options" data-featured-options>
+          {% for option in featured_product.options_with_values %}
+            {% assign option_name_downcase = option.name | downcase %}
+
+            <fieldset
+              class="loomhaus-featured__option"
+              data-option-index="{{ forloop.index0 }}"
+              data-option-name="{{ option.name | escape }}"
+            >
+              <legend class="loomhaus-featured__option-label">
+                {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+                  {{ option.name | upcase }}: <span data-selected-option>{{ current_variant.options[forloop.index0] }}</span>
+                {% else %}
+                  {{ option.name | upcase }}
+                {% endif %}
+              </legend>
+
+              <div class="loomhaus-featured__option-values">
+                {% for value in option.values %}
+                  {% assign value_downcase = value | downcase %}
+                  {% assign is_color_option = false %}
+                  {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+                    {% assign is_color_option = true %}
+                  {% endif %}
+
+                  <button
+                    type="button"
+                    class="
+                      loomhaus-featured__value
+                      {% if is_color_option %}loomhaus-featured__value--color{% endif %}
+                      {% if current_variant.options[forloop.parentloop.index0] == value %}is-selected{% endif %}
+                    "
+                    data-option-value="{{ value | escape }}"
+                    aria-label="{{ option.name | escape }}: {{ value | escape }}"
+                    aria-pressed="{% if current_variant.options[forloop.parentloop.index0] == value %}true{% else %}false{% endif %}"
+                  >
+                    {% if is_color_option %}
+                      <span
+                        class="loomhaus-featured__swatch"
+                        style="--swatch-color:
+                          {% case value_downcase %}
+                            {% when 'black' %}#222222
+                            {% when 'white' %}#ffffff
+                            {% when 'navy' %}#17263f
+                            {% when 'blue' %}#315b91
+                            {% when 'red' %}#b52e35
+                            {% when 'green' %}#526b50
+                            {% when 'olive' %}#77764b
+                            {% when 'brown' %}#79533b
+                            {% when 'grey' %}#999999
+                            {% when 'gray' %}#999999
+                            {% else %}{{ value | downcase }}
+                          {% endcase %}
+                        "
+                      ></span>
+                    {% else %}
+                      {{ value | escape }}
+                      {% for block in section.blocks %}
+                        {% if block.type == 'size_label' and block.settings.size == value and block.settings.label != blank %}
+                          <span class="loomhaus-featured__size-label" {{ block.shopify_attributes }}>
+                            {{ block.settings.label | escape }}
+                          </span>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </button>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% endfor %}
+        </div>
+
+        <!-- Size ribbon -->
+        {% assign has_size_label_blocks = false %}
+        {% for block in section.blocks %}
+          {% if block.type == 'size_label' and block.settings.label != blank %}
+            {% assign has_size_label_blocks = true %}
+          {% endif %}
+        {% endfor %}
+        {% if size_ribbon != blank and has_size_label_blocks == false %}
+          <p class="loomhaus-featured__ribbon">{{ size_ribbon | escape }}</p>
+        {% endif %}
+
+        <!-- Quantity and Add to cart -->
+        <div class="loomhaus-featured__purchase-row">
+          <div class="loomhaus-featured__quantity" aria-label="Quantity selector">
+            <button type="button" data-quantity-minus aria-label="Decrease quantity">−</button>
+            <input
+              type="number"
+              value="1"
+              min="1"
+              step="1"
+              name="quantity"
+              data-quantity-input
+              aria-label="Quantity"
+            >
+            <button type="button" data-quantity-plus aria-label="Increase quantity">+</button>
+          </div>
+
+          <button
+            type="button"
+            class="loomhaus-featured__add"
+            data-featured-add
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            <span data-featured-add-text>
+              {% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ section.settings.sold_out_label | escape }}{% endif %}
+            </span>
+            <img
+              class="loomhaus-featured__add-arrow"
+              src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right_ca1fffaa-fb25-4d69-9eaf-cbbbacfe05b0.png?v=1793638060"
+              alt=""
+              width="16"
+              height="16"
+              loading="lazy"
+            >
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="loomhaus-featured__buy"
+          data-featured-buy
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {{ section.settings.buy_label | escape }}
+        </button>
+
+        <!-- Offer cards -->
+        {% for block in section.blocks %}
+          {% if block.type == 'offer' and block.settings.code != blank %}
+            {% assign has_offer_blocks = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if has_offer_blocks %}
+          <div class="loomhaus-featured__offers">
+            {% for block in section.blocks %}
+              {% if block.type == 'offer' and block.settings.code != blank %}
+                {% assign offer_multiplier = 100 | minus: block.settings.discount %}
+                {% assign offer_price = current_variant.price | times: offer_multiplier | divided_by: 100 %}
+                <div class="loomhaus-featured__offer" {{ block.shopify_attributes }}>
+                  <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
+                  <div>
+                    <strong data-offer-price data-offer-discount="{{ block.settings.discount }}">
+                      Get it for {{ offer_price | money }}
+                    </strong>
+                    <p>
+                      {% if block.settings.buy_two %}
+                        Buy 2, use code {{ block.settings.code | escape }} for {{ block.settings.discount }}% off
+                      {% else %}
+                        Use code {{ block.settings.code | escape }} for {{ block.settings.discount }}% off
+                      {% endif %}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    data-copy-code="{{ block.settings.code | escape }}"
+                    aria-label="Copy offer code {{ block.settings.code | escape }}"
+                  >▢</button>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% elsif offer_code_1 != blank or offer_code_2 != blank %}
+          <div class="loomhaus-featured__offers">
+            {% if offer_code_1 != blank %}
+              {% assign offer_multiplier_1 = 100 | minus: offer_discount_1 %}
+              {% assign offer_price_1 = current_variant.price | times: offer_multiplier_1 | divided_by: 100 %}
+              <div class="loomhaus-featured__offer">
+                <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
+                <div>
+                  <strong data-offer-price-one data-offer-discount="{{ offer_discount_1 }}">
+                    Get it for {{ offer_price_1 | money }}
+                  </strong>
+                  <p>Use code {{ offer_code_1 | escape }} for {{ offer_discount_1 }}% off</p>
+                </div>
+                <button type="button" data-copy-code="{{ offer_code_1 | escape }}" aria-label="Copy offer code {{ offer_code_1 | escape }}">
+                  ▢
+                </button>
+              </div>
+            {% endif %}
+
+            {% if offer_code_2 != blank %}
+              {% assign offer_multiplier_2 = 100 | minus: offer_discount_2 %}
+              {% assign offer_price_2 = current_variant.price | times: offer_multiplier_2 | divided_by: 100 %}
+              <div class="loomhaus-featured__offer">
+                <span class="loomhaus-featured__offer-icon" aria-hidden="true">%</span>
+                <div>
+                  <strong data-offer-price-two data-offer-discount="{{ offer_discount_2 }}">Get it for {{ offer_price_2 | money }}</strong>
+                  <p>Buy 2, use code {{ offer_code_2 | escape }} for {{ offer_discount_2 }}% off</p>
+                </div>
+                <button type="button" data-copy-code="{{ offer_code_2 | escape }}" aria-label="Copy offer code {{ offer_code_2 | escape }}">
+                  ▢
+                </button>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <p class="loomhaus-featured__message" data-featured-message aria-live="polite"></p>
+
+      </div>
+    </div>
+  </section>
+
+{% else %}
+  <div class="loomhaus-featured__empty">
+    Select a product in the Featured Product section settings.
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Loomhaus featured product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select product"
+    },
+    {
+      "type": "text",
+      "id": "tax_note",
+      "label": "Tax note",
+      "default": "MRP inclusive of all taxes"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add to cart label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "text",
+      "id": "buy_label",
+      "label": "Buy now label",
+      "default": "BUY IT NOW"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "SOLD OUT"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding label",
+      "default": "ADDING..."
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Added label",
+      "default": "ADDED TO CART"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Unavailable label",
+      "default": "UNAVAILABLE"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Savings label",
+      "default": "SAVE"
+    }
+  ],
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Product badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Badge text",
+          "default": "Loomhaus #1 Everyday Top"
+        }
+      ]
+    },
+    {
+      "type": "rating",
+      "name": "Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "rating",
+          "label": "Rating",
+          "default": "4.6"
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "Review count",
+          "default": "1,240+"
+        }
+      ]
+    },
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Keeps its shape after 50+ washes"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Heavyweight 320 GSM cotton, tested in our lab. See test results"
+        }
+      ]
+    },
+    {
+      "type": "size_label",
+      "name": "Size label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "size",
+          "label": "Variant value",
+          "default": "S"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Most Ordered"
+        }
+      ]
+    },
+    {
+      "type": "offer",
+      "name": "Offer card",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code",
+          "default": "LOOM10"
+        },
+        {
+          "type": "range",
+          "id": "discount",
+          "label": "Discount",
+          "min": 1,
+          "max": 90,
+          "step": 1,
+          "unit": "%",
+          "default": 10
+        },
+        {
+          "type": "checkbox",
+          "id": "buy_two",
+          "label": "Show a buy-two message",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus featured product",
+      "blocks": [
+        { "type": "badge" },
+        { "type": "rating" },
+        { "type": "highlight" },
+        {
+          "type": "size_label",
+          "settings": {
+            "size": "S",
+            "label": "Most Ordered"
+          }
+        },
+        {
+          "type": "size_label",
+          "settings": {
+            "size": "L",
+            "label": "Best Fit"
+          }
+        },
+        { "type": "offer" },
+        {
+          "type": "offer",
+          "settings": {
+            "code": "LOOM15",
+            "discount": 15,
+            "buy_two": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

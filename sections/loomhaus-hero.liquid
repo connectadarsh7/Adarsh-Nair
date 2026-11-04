@@ -1,0 +1,212 @@
+
+{{ 'loomhaus-hero.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="loomhaus-hero"
+  id="LoomhausHero-{{ section.id }}"
+>
+  <div class="loomhaus-hero__container">
+
+    <div class="loomhaus-hero__content">
+
+      {% if section.settings.badge != blank %}
+        <div class="loomhaus-hero__badge">
+          {{ section.settings.badge | escape }}
+        </div>
+      {% endif %}
+
+      <h1 class="loomhaus-hero__heading">
+        {{ section.settings.heading | escape }}
+      </h1>
+
+      <div class="loomhaus-hero__description">
+        {{ section.settings.description }}
+      </div>
+
+      {% if section.settings.button_label != blank %}
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="loomhaus-hero__button"
+        >
+          <span>{{ section.settings.button_label | escape }}</span>
+
+          <img
+            src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right_ca1fffaa-fb25-4d69-9eaf-cbbbacfe05b0.png?v=1793638060"
+            alt=""
+            class="loomhaus-hero__button-arrow"
+            width="24"
+            height="24"
+          >
+        </a>
+      {% endif %}
+
+      <div class="loomhaus-hero__highlights">
+
+        <div class="loomhaus-hero__highlight">
+          <strong>{{ section.settings.rating_value | escape }}</strong>
+          <span>{{ section.settings.rating_label | escape }}</span>
+        </div>
+
+        <div class="loomhaus-hero__highlight">
+          <strong>{{ section.settings.fabric_value | escape }}</strong>
+          <span>{{ section.settings.fabric_label | escape }}</span>
+        </div>
+
+        <div class="loomhaus-hero__highlight">
+          <strong>{{ section.settings.returns_value | escape }}</strong>
+          <span>{{ section.settings.returns_label | escape }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="loomhaus-hero__visual">
+
+      {% if section.settings.hero_image != blank %}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'loomhaus-hero__image',
+            loading: 'eager',
+            alt: section.settings.heading
+        }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'loomhaus-hero__placeholder' }}
+      {% endif %}
+
+      {% assign featured_product = section.settings.featured_product %}
+
+      {% if featured_product != blank %}
+        <a
+          href="{{ featured_product.url }}"
+          class="loomhaus-hero__product-card"
+        >
+          {% if featured_product.featured_image != blank %}
+            {{
+              featured_product.featured_image
+              | image_url: width: 100
+              | image_tag:
+                class: 'loomhaus-hero__product-image',
+                loading: 'lazy',
+                alt: featured_product.title
+            }}
+          {% endif %}
+
+          <div class="loomhaus-hero__product-info">
+            <strong>
+              {{ section.settings.product_card_title | default: featured_product.title | escape }}
+            </strong>
+            <span>{{ section.settings.product_card_subtitle | escape }}</span>
+          </div>
+        </a>
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Loomhaus hero banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Season badge",
+      "default": "NEW SEASON · AUTUMN / WINTER"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Winter Edit"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Floating product"
+    },
+    {
+      "type": "text",
+      "id": "product_card_title",
+      "label": "Product card title",
+      "default": "Yellow Wool Jumper"
+    },
+    {
+      "type": "text",
+      "id": "product_card_subtitle",
+      "label": "Product card subtitle",
+      "default": "Bestseller this week"
+    },
+    {
+      "type": "header",
+      "content": "Customer highlights"
+    },
+    {
+      "type": "text",
+      "id": "rating_value",
+      "label": "Rating value",
+      "default": "4.8★"
+    },
+    {
+      "type": "text",
+      "id": "rating_label",
+      "label": "Rating description",
+      "default": "2,000+ reviews"
+    },
+    {
+      "type": "text",
+      "id": "fabric_value",
+      "label": "Fabric value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "fabric_label",
+      "label": "Fabric description",
+      "default": "organic cotton"
+    },
+    {
+      "type": "text",
+      "id": "returns_value",
+      "label": "Returns value",
+      "default": "30 days"
+    },
+    {
+      "type": "text",
+      "id": "returns_label",
+      "label": "Returns description",
+      "default": "free returns"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus hero banner"
+    }
+  ]
+}
+{% endschema %}

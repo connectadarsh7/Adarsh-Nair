@@ -1,0 +1,97 @@
+{{ 'loomhaus-marquee.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="loomhaus-marquee"
+  id="LoomhausMarquee-{{ section.id }}"
+  style="--marquee-duration: {{ section.settings.speed }}s;"
+>
+  <div class="loomhaus-marquee__track">
+
+    {% for repeat in (1..4) %}
+      <div
+        class="loomhaus-marquee__group"
+        {% if repeat == 2 %}aria-hidden="true"{% endif %}
+      >
+        {% for block in section.blocks %}
+          <div
+            class="loomhaus-marquee__item"
+            {{ block.shopify_attributes }}
+          >
+            <span>{{ block.settings.text | escape }}</span>
+            <span class="loomhaus-marquee__star" aria-hidden="true">✦</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Loomhaus marquee",
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scrolling speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "marquee_item",
+      "name": "Marquee text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Organic cotton"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus marquee",
+      "blocks": [
+        {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Organic cotton"
+          }
+        },
+        {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Made to last"
+          }
+        },
+        {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Sizes XS to L"
+          }
+        },
+        {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Free returns"
+          }
+        },
+        {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Ethically made"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

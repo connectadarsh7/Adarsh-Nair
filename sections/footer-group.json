@@ -11,8 +11,24 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "loomhaus_footer": {
+      "type": "loomhaus-footer",
+      "settings": {
+        "brand_name": "Loomhaus",
+        "tagline": "Clothes made to be worn for years, not seasons.",
+        "shop_heading": "SHOP",
+        "shop_menu": "shop",
+        "help_heading": "HELP",
+        "help_menu": "help",
+        "background_color": "#292a27",
+        "text_color": "#f5f2ec",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
     "footer": {
       "type": "footer",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
@@ -30,6 +46,7 @@
     }
   },
   "order": [
+    "loomhaus_footer",
     "footer"
   ]
 }

@@ -1,0 +1,176 @@
+
+{{ 'loomhaus-product-grid.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'loomhaus-product-grid.js' | asset_url }}" defer="defer"></script>
+
+<section
+  class="loomhaus-lookbook"
+  id="LoomhausLookbook-{{ section.id }}"
+>
+  <div class="loomhaus-lookbook__container">
+
+    <!-- Heading row -->
+    <div class="loomhaus-lookbook__header">
+      <div class="loomhaus-lookbook__heading">
+        {% if section.settings.eyebrow != blank %}
+          <span class="loomhaus-lookbook__eyebrow">
+            {{ section.settings.eyebrow | escape }}
+          </span>
+        {% endif %}
+
+        <h2>{{ section.settings.heading | escape }}</h2>
+      </div>
+
+      {% if section.settings.helper_text != blank %}
+        <p class="loomhaus-lookbook__helper">
+          {{ section.settings.helper_text | escape }}
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Product grid -->
+    <div class="loomhaus-lookbook__grid">
+
+      {% for block in section.blocks %}
+        {% assign product = block.settings.product %}
+
+        {% if product != blank %}
+          <div
+            class="loomhaus-lookbook__tile"
+            {{ block.shopify_attributes }}
+          >
+            <a
+              class="loomhaus-lookbook__image-link"
+              href="{{ product.url }}"
+              aria-label="{{ product.title | escape }}"
+            >
+              {% if product.featured_image != blank %}
+                {{
+                  product.featured_image
+                  | image_url: width: 900
+                  | image_tag:
+                    class: 'loomhaus-lookbook__image',
+                    loading: 'lazy',
+                    alt: product.title
+                }}
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'loomhaus-lookbook__placeholder' }}
+              {% endif %}
+            </a>
+
+            <!-- Hotspot -->
+            <button
+              type="button"
+              class="loomhaus-lookbook__hotspot"
+              style="
+                --hotspot-x: {{ block.settings.hotspot_x }}%;
+                --hotspot-y: {{ block.settings.hotspot_y }}%;
+              "
+              aria-label="Quick view {{ product.title | escape }}"
+              data-quick-view
+              data-product-url="{{ product.url }}"
+            >
+              <span aria-hidden="true">+</span>
+            </button>
+
+            <!-- Product label -->
+            <a
+              href="{{ product.url }}"
+              class="loomhaus-lookbook__label"
+            >
+              <span class="loomhaus-lookbook__product-title">
+                {{ product.title | escape }}
+              </span>
+
+              <span class="loomhaus-lookbook__product-price">
+                {{ product.price | money }}
+              </span>
+            </a>
+          </div>
+
+        {% else %}
+          <div class="loomhaus-lookbook__tile loomhaus-lookbook__empty">
+            {{ 'product-1' | placeholder_svg_tag: 'loomhaus-lookbook__placeholder' }}
+            <span>Select a product in the theme editor</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+
+  <!-- Quick view modal -->
+{% render 'loomhaus-quick-view', section_id: section.id %}
+</section>
+
+{% schema %}
+{
+  "name": "Loomhaus product grid",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "SHOP THE LOOK"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "Loomhaus in the wild"
+    },
+    {
+      "type": "text",
+      "id": "helper_text",
+      "label": "Helper text",
+      "default": "Tap the + on any look to shop it."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Product tile",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select product"
+        },
+        {
+          "type": "range",
+          "id": "hotspot_x",
+          "label": "Hotspot horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "hotspot_y",
+          "label": "Hotspot vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus product grid",
+      "blocks": [
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" }
+      ]
+    }
+  ]
+}
+{% endschema %}

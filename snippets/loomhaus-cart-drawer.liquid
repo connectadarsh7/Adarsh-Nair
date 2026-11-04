@@ -1,0 +1,94 @@
+{%- assign auto_product = all_products['dark-winter-jacket'] -%}
+{%- assign auto_variant_id = '' -%}
+{%- assign auto_size_index = -1 -%}
+{%- assign auto_color_index = -1 -%}
+
+{%- if auto_product != blank -%}
+  {%- for option in auto_product.options -%}
+    {%- assign option_name = option | downcase -%}
+    {%- if option_name contains 'size' -%}
+      {%- assign auto_size_index = forloop.index0 -%}
+    {%- elsif option_name contains 'color' or option_name contains 'colour' -%}
+      {%- assign auto_color_index = forloop.index0 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if auto_size_index >= 0 and auto_color_index >= 0 -%}
+    {%- for variant in auto_product.variants -%}
+      {%- assign variant_size = variant.options[auto_size_index] | downcase -%}
+      {%- assign variant_color = variant.options[auto_color_index] | downcase -%}
+      {%- if variant_size == 'm' and variant_color == 'black' and variant.available -%}
+        {%- assign auto_variant_id = variant.id -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{{ 'loomhaus-cart-drawer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'loomhaus-cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+<div
+  class="loomhaus-cart"
+  data-loomhaus-cart
+  data-cart-root="{{ routes.root_url }}"
+  data-cart-url="{{ routes.cart_url }}"
+  data-auto-variant-id="{{ auto_variant_id }}"
+  data-auto-product-title="{{ auto_product.title | default: 'Soft Winter Jacket' | escape }}"
+  aria-hidden="true"
+>
+  <button
+    class="loomhaus-cart__backdrop"
+    type="button"
+    data-cart-close
+    aria-label="Close cart"
+    tabindex="-1"
+  ></button>
+
+  <aside
+    class="loomhaus-cart__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="LoomhausCartTitle"
+    tabindex="-1"
+    data-cart-panel
+  >
+    <header class="loomhaus-cart__header">
+      <h2 class="loomhaus-cart__title" id="LoomhausCartTitle">
+        Your cart (<span data-drawer-count>{{ cart.item_count }}</span>)
+      </h2>
+      <button
+        class="loomhaus-cart__close"
+        type="button"
+        data-cart-close
+        aria-label="Close cart"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </header>
+
+    <p class="loomhaus-cart__error" data-cart-error role="alert" hidden></p>
+
+    <div class="loomhaus-cart__items" data-drawer-items aria-live="polite">
+      <p class="loomhaus-cart__empty" data-cart-empty hidden>Your cart is empty.</p>
+    </div>
+
+    <footer class="loomhaus-cart__footer" data-drawer-footer>
+      <div class="loomhaus-cart__subtotal">
+        <span>Subtotal</span>
+        <strong data-drawer-subtotal>{{ cart.total_price | money }}</strong>
+      </div>
+      <p class="loomhaus-cart__note">Taxes included. Shipping calculated at checkout.</p>
+      <a class="loomhaus-cart__checkout" href="{{ routes.root_url }}checkout" data-cart-checkout>
+        <span>CHECKOUT</span>
+        <img
+          class="loomhaus-cart__checkout-arrow"
+          src="https://cdn.shopify.com/s/files/1/0775/2024/0730/files/arrow-right_ca1fffaa-fb25-4d69-9eaf-cbbbacfe05b0.png?v=1793638060"
+          alt=""
+          width="20"
+          height="12"
+        >
+      </a>
+    </footer>
+  </aside>
+</div>

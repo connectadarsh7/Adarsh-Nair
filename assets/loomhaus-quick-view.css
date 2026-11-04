@@ -1,0 +1,342 @@
+
+/* =========================================
+   LOOMHAUS QUICK VIEW - DESKTOP
+========================================= */
+
+.loomhaus-quick-view {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.loomhaus-quick-view.is-open {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+div.loomhaus-quick-view__overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.loomhaus-quick-view__panel {
+  position: relative;
+  inset: auto;
+  transform: none;
+  z-index: 2;
+  width: 425px;
+  max-width: 100%;
+  min-height: 0;
+  overflow: visible;
+  padding: 16px;
+  background: #fff;
+  border-radius: 11px;
+  box-sizing: border-box;
+}
+
+.loomhaus-quick-view__content {
+  display: grid;
+  grid-template-columns: 166px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.loomhaus-quick-view__image-wrap {
+  width: 166px;
+  height: 234px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f3f0e9;
+}
+
+.loomhaus-quick-view__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.loomhaus-quick-view__details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.loomhaus-quick-view__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #292927;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__product-heading {
+  padding-right: 18px;
+}
+
+.loomhaus-quick-view__product-heading h2 {
+  margin: 0 0 4px;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.loomhaus-quick-view__price {
+  margin: 0 0 10px;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.loomhaus-quick-view__description {
+  margin: 0 0 10px;
+  color: #686861;
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.loomhaus-quick-view__option-group {
+  margin-bottom: 9px;
+}
+
+.loomhaus-quick-view__option-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.loomhaus-quick-view__colors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.loomhaus-quick-view__color-button {
+  min-width: 0;
+  min-height: 29px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border: 1px solid #ded8cd;
+  border-radius: 6px;
+  background: #fff;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__color-button.is-selected {
+  border: 1px solid #292927;
+  background: #f5f2ec;
+}
+
+.loomhaus-quick-view__color-button:focus-visible,
+.loomhaus-quick-view__select:focus-visible,
+.loomhaus-quick-view__add:focus-visible,
+.loomhaus-quick-view__close:focus-visible {
+  outline: 2px solid #777a67;
+  outline-offset: 2px;
+}
+
+.loomhaus-quick-view__color-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border: 1px solid #ded8cd;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.loomhaus-quick-view__color-dot.is-dark {
+  border-color: #292927;
+  background: #292927;
+}
+
+.loomhaus-quick-view__select {
+  width: 100%;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid #292927;
+  border-radius: 5px;
+  background: #fff;
+  color: #292927;
+  font-family: "Cabin", sans-serif;
+  font-size: 10px;
+}
+
+.loomhaus-quick-view__add {
+  width: 100%;
+  min-height: 31px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 7px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: #292927;
+  color: #fff;
+  font-family: "Cabin", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.loomhaus-quick-view__add:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.loomhaus-quick-view__arrow {
+  width: 15px;
+  height: 10px;
+  object-fit: contain;
+}
+
+.loomhaus-quick-view__message {
+  margin: 4px 0 0;
+  color: #686861;
+  font-size: 10px;
+}
+
+.loomhaus-quick-view [hidden] {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  .loomhaus-quick-view {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .loomhaus-quick-view__panel {
+    /* width: calc(100% - 44px); */
+    max-width: 420px;
+    min-height: 0;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 22px 14px 19px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .loomhaus-quick-view__content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .loomhaus-quick-view__image-wrap {
+    width: 100%;
+    height: 164px;
+    flex: 0 0 164px;
+    border-radius: 7px;
+  }
+
+  .loomhaus-quick-view__image {
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  .loomhaus-quick-view__close {
+    top: 198px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    font-size: 22px;
+  }
+
+  .loomhaus-quick-view__product-heading {
+    padding-right: 22px;
+  }
+
+  .loomhaus-quick-view__product-heading h2 {
+    font-size: 14px;
+  }
+
+  .loomhaus-quick-view__price {
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+
+  .loomhaus-quick-view__description {
+    display: block;
+    min-height: 20px;
+    margin: 7px 0 16px;
+    font-size: 9px;
+  }
+
+  .loomhaus-quick-view__option-group {
+    margin-bottom: 8px;
+  }
+
+  .loomhaus-quick-view__option-group + .loomhaus-quick-view__option-group {
+    margin-top: 8px;
+  }
+
+  .loomhaus-quick-view__option-label {
+    margin-bottom: 5px;
+    font-size: 9px;
+  }
+
+  .loomhaus-quick-view__colors {
+    gap: 7px;
+  }
+
+  .loomhaus-quick-view__color-button {
+    min-height: 28px;
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+
+  .loomhaus-quick-view__select {
+    height: 28px;
+    font-size: 9px;
+  }
+
+  .loomhaus-quick-view__add {
+    min-height: 29px;
+    margin-top: 2px;
+    padding: 7px 14px;
+    font-size: 9px;
+  }
+
+  .loomhaus-quick-view__arrow {
+    width: 14px;
+    height: 9px;
+  }
+}

@@ -42,6 +42,7 @@
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'featured-product.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
 
@@ -73,10 +74,10 @@
   {%- endunless -%}
   <section class="color-{{ section.settings.color_scheme }} {% if section.settings.secondary_background %}background-secondary{% else %}gradient{% endif %}">
     <div class="page-width section-{{ section.id }}-padding{% if section.settings.secondary_background %} isolate{% endif %}">
-      <div class="featured-product product product--{{ section.settings.media_size }} grid grid--1-col gradient color-{{ section.settings.color_scheme }} product--{{ section.settings.media_position }}{% if section.settings.secondary_background == false %} isolate{% endif %} {% if product.media.size > 0 or section.settings.product == blank %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+      <div class="featured-product product product--{{ section.settings.media_size }} product--{{ section.settings.gallery_layout }} grid grid--1-col gradient color-{{ section.settings.color_scheme }} product--{{ section.settings.media_position }}{% if section.settings.secondary_background == false %} isolate{% endif %} {% if product.media.size > 0 or section.settings.product == blank %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
         <div class="grid__item product__media-wrapper">
           {%- unless placeholder -%}
-            {% render 'product-media-gallery', product: product, variant_images: variant_images, limit: 1 %}
+            {% render 'product-media-gallery', product: product, variant_images: variant_images %}
           {%- else -%}
             <div class="product__media-item">
               <div
@@ -91,13 +92,14 @@
         <div class="product__info-wrapper grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <section
             id="ProductInfo-{{ section.id }}"
-            class="product__info-container"
+            class="product__info-container featured-product__info"
             data-section="{{ section.id }}"
             data-url="{{ product.url }}"
           >
             {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
             {%- for block in section.blocks -%}
+              <div class="featured-product__block featured-product__block--{% if block.type == '@app' %}app{% else %}{{ block.type | replace: '_', '-' }}{% endif %}">
               {%- case block.type -%}
                 {%- when '@app' -%}
                   {% render block %}
@@ -122,9 +124,21 @@
                       product: product,
                       placeholder: placeholder,
                       use_variant: true,
-                      show_badges: true,
+                      show_badges: false,
                       price_class: 'price--large'
                     -%}
+                    {%- assign current_variant = product.selected_or_first_available_variant -%}
+                    {%- if current_variant.compare_at_price > current_variant.price -%}
+                      {%- assign savings_amount = current_variant.compare_at_price
+                        | minus: current_variant.price
+                        | times: 100.0
+                        | divided_by: current_variant.compare_at_price
+                        | round
+                      -%}
+                      <span class="featured-product__savings-badge">
+                        {{- 'Save ' | append: savings_amount | append: '%' -}}
+                      </span>
+                    {%- endif -%}
                   </div>
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -406,14 +420,21 @@
                   {% render 'product-variant-picker',
                     product: product,
                     block: block,
-                    product_form_id: product_form_id
+                    product_form_id: product_form_id,
+                    featured_product: true,
+                    ribbon_option_name: section.settings.ribbon_option_name,
+                    most_ordered_value: section.settings.most_ordered_value,
+                    most_ordered_label: section.settings.most_ordered_label,
+                    best_fit_value: section.settings.best_fit_value,
+                    best_fit_label: section.settings.best_fit_label
                   %}
                 {%- when 'buy_buttons' -%}
                   {%- render 'buy-buttons',
                     block: block,
                     product: product,
                     product_form_id: product_form_id,
-                    section_id: section.id
+                    section_id: section.id,
+                    featured_product: true
                   -%}
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
@@ -458,7 +479,72 @@
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
               {%- endcase -%}
+              </div>
             {%- endfor -%}
+            {%- if product != blank and section.settings.show_highlight -%}
+              <div class="featured-product__block featured-product__block--highlight">
+                <div class="featured-product__highlight">
+                  <span class="featured-product__highlight-icon" aria-hidden="true">
+                    {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                  </span>
+                  <div class="featured-product__highlight-copy">
+                    {%- if section.settings.highlight_title != blank -%}
+                      <p class="featured-product__highlight-title">{{ section.settings.highlight_title | escape }}</p>
+                    {%- endif -%}
+                    {%- if section.settings.highlight_text != blank -%}
+                      <div class="featured-product__highlight-text rte">{{ section.settings.highlight_text }}</div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if product != blank and section.settings.show_offer_cards -%}
+              {%- assign current_variant = product.selected_or_first_available_variant -%}
+              <div class="featured-product__block featured-product__block--offers" id="FeaturedOffers-{{ section.id }}">
+                <featured-offer-cards class="featured-product__offers">
+                  {%- for offer_index in (1..2) -%}
+                    {%- liquid
+                      if offer_index == 1
+                        assign offer_code = section.settings.offer_1_code
+                        assign offer_discount = section.settings.offer_1_discount
+                        assign offer_copy = section.settings.offer_1_copy
+                      else
+                        assign offer_code = section.settings.offer_2_code
+                        assign offer_discount = section.settings.offer_2_discount
+                        assign offer_copy = section.settings.offer_2_copy
+                      endif
+                      assign offer_multiplier = 100 | minus: offer_discount
+                      assign offer_price = current_variant.price | times: offer_multiplier | divided_by: 100.0 | round
+                      assign offer_copy = offer_copy | replace: '[code]', offer_code | replace: '[discount]', offer_discount
+                    -%}
+                    {%- if offer_code != blank -%}
+                      <div class="featured-product__offer">
+                        <span class="featured-product__offer-icon" aria-hidden="true">
+                          <span>%</span>
+                        </span>
+                        <div class="featured-product__offer-copy">
+                          <p class="featured-product__offer-price">
+                            Get it for <strong>{{ offer_price | money }}</strong>
+                          </p>
+                          <p class="featured-product__offer-description">{{ offer_copy | escape }}</p>
+                        </div>
+                        <button
+                          class="featured-product__copy"
+                          type="button"
+                          data-copy-code="{{ offer_code | escape }}"
+                          aria-label="Copy discount code {{ offer_code | escape }}"
+                        >
+                          <span class="svg-wrapper" aria-hidden="true">
+                            {{- 'icon-copy.svg' | inline_asset_content -}}
+                          </span>
+                          <span class="featured-product__copy-status" aria-live="polite"></span>
+                        </button>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </featured-offer-cards>
+              </div>
+            {%- endif -%}
             <a
               {% if product == blank %}
                 role="link" aria-disabled="true"
@@ -1502,6 +1588,156 @@
       "label": "t:sections.featured-product.settings.enable_video_looping.label"
     },
     {
+      "type": "select",
+      "id": "gallery_layout",
+      "options": [
+        {
+          "value": "stacked",
+          "label": "t:sections.main-product.settings.gallery_layout.options__1.label"
+        },
+        {
+          "value": "columns",
+          "label": "t:sections.main-product.settings.gallery_layout.options__2.label"
+        },
+        {
+          "value": "thumbnail",
+          "label": "t:sections.main-product.settings.gallery_layout.options__3.label"
+        },
+        {
+          "value": "thumbnail_slider",
+          "label": "t:sections.main-product.settings.gallery_layout.options__4.label"
+        }
+      ],
+      "default": "thumbnail",
+      "label": "t:sections.main-product.settings.gallery_layout.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_thumbnails",
+      "options": [
+        {
+          "value": "columns",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__1.label"
+        },
+        {
+          "value": "show",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__2.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__3.label"
+        }
+      ],
+      "default": "hide",
+      "label": "t:sections.main-product.settings.mobile_thumbnails.label"
+    },
+    {
+      "type": "header",
+      "content": "Featured product highlights"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_highlight",
+      "default": true,
+      "label": "Show highlight box"
+    },
+    {
+      "type": "text",
+      "id": "highlight_title",
+      "default": "Keeps its shape after 50+ washes",
+      "label": "Highlight heading"
+    },
+    {
+      "type": "richtext",
+      "id": "highlight_text",
+      "default": "<p>Heavyweight 320 GSM cotton, tested in our lab. See test results</p>",
+      "label": "Highlight text"
+    },
+    {
+      "type": "text",
+      "id": "ribbon_option_name",
+      "default": "Size",
+      "label": "Ribbon option name"
+    },
+    {
+      "type": "text",
+      "id": "most_ordered_value",
+      "default": "S",
+      "label": "Most ordered option value"
+    },
+    {
+      "type": "text",
+      "id": "most_ordered_label",
+      "default": "Most Ordered",
+      "label": "Most ordered ribbon"
+    },
+    {
+      "type": "text",
+      "id": "best_fit_value",
+      "default": "L",
+      "label": "Best fit option value"
+    },
+    {
+      "type": "text",
+      "id": "best_fit_label",
+      "default": "Best Fit",
+      "label": "Best fit ribbon"
+    },
+    {
+      "type": "header",
+      "content": "Offer cards"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_offer_cards",
+      "default": true,
+      "label": "Show offer cards"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_code",
+      "default": "LOOM10",
+      "label": "First offer code"
+    },
+    {
+      "type": "range",
+      "id": "offer_1_discount",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "default": 10,
+      "label": "First offer discount"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_copy",
+      "default": "Use code [code] for [discount]% off",
+      "label": "First offer description"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_code",
+      "default": "LOOM15",
+      "label": "Second offer code"
+    },
+    {
+      "type": "range",
+      "id": "offer_2_discount",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "default": 15,
+      "label": "Second offer discount"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_copy",
+      "default": "Buy 2, code [code] for [discount]% off",
+      "label": "Second offer description"
+    },
+    {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
     },
@@ -1536,6 +1772,9 @@
             "text": "{{ section.settings.product.vendor }}",
             "text_style": "uppercase"
           }
+        },
+        {
+          "type": "rating"
         },
         {
           "type": "title"
