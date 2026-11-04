@@ -24,7 +24,7 @@
   pointer-events: auto;
 }
 
-.loomhaus-quick-view__overlay {
+div.loomhaus-quick-view__overlay {
   position: absolute;
   inset: 0;
   display: block;
