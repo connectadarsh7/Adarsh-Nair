@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeProduct = null;
     let selectedOptions = {};
     let lastFocusedElement = null;
+    let productRequestId = 0;
+    let productRequestController = null;
 
     const getOptionNames = (product) => {
       return (product?.options || []).map((option) => {
@@ -312,7 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const openModal = () => {
-      lastFocusedElement = document.activeElement;
+      if (!modal.classList.contains('is-open')) {
+        lastFocusedElement = document.activeElement;
+      }
 
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
@@ -322,6 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const closeModal = () => {
+      productRequestId += 1;
+      productRequestController?.abort();
+      productRequestController = null;
       modal.classList.remove('is-open');
       modal.classList.remove('is-loading');
       modal.setAttribute('aria-hidden', 'true');
@@ -335,29 +342,56 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const loadProduct = async (url) => {
+      productRequestController?.abort();
+      productRequestController = new AbortController();
+      const requestId = ++productRequestId;
+
+      activeProduct = null;
+      selectedOptions = {};
+      title.textContent = '';
+      price.textContent = '';
+      description.textContent = '';
+      image.removeAttribute('src');
+      image.alt = '';
+      colorOptions.replaceChildren();
+      colorGroup.hidden = true;
+      sizeSelect.replaceChildren();
+      sizeGroup.hidden = true;
+      otherOptions.replaceChildren();
       message.textContent = 'Loading product...';
       addButton.disabled = true;
+      if (addButtonText) addButtonText.textContent = 'LOADING...';
 
       modal.classList.add('is-loading');
       openModal();
 
       try {
-        const response = await fetch(`${url}.js`);
+        const response = await fetch(`${url}.js`, {
+          signal: productRequestController.signal
+        });
 
         if (!response.ok) {
           throw new Error('Unable to load this product.');
         }
 
         const product = await response.json();
+        if (requestId !== productRequestId) return;
 
         renderProduct(product);
 
         modal.classList.remove('is-loading');
         message.textContent = '';
       } catch (error) {
+        if (error.name === 'AbortError' || requestId !== productRequestId) return;
+
         console.error(error);
         modal.classList.remove('is-loading');
         message.textContent = 'Unable to load product. Please try again.';
+        if (addButtonText) addButtonText.textContent = 'ADD TO CART';
+      } finally {
+        if (requestId === productRequestId) {
+          productRequestController = null;
+        }
       }
     };
 

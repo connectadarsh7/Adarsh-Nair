@@ -240,8 +240,15 @@
     });
   }
 
-  async function getLatestCart() {
-    if (cartRequest) return cartRequest;
+  async function getLatestCart(forceRefresh = false) {
+    if (cartRequest) {
+      if (!forceRefresh) return cartRequest;
+      try {
+        await cartRequest;
+      } catch (error) {
+        console.warn('Loomhaus cart refresh retry after stale request failure:', error);
+      }
+    }
 
     cartRequest = requestCart()
       .then(syncAutoItem)
@@ -264,7 +271,7 @@
     return cartRequest;
   }
 
-  async function openDrawer(trigger) {
+  async function openDrawer(trigger, forceRefresh = false) {
     returnScrollPosition = { x: window.scrollX, y: window.scrollY };
     activeTrigger = trigger || activeTrigger;
     drawer.classList.add('is-open');
@@ -276,7 +283,7 @@
     panel.focus({ preventScroll: true });
     window.scrollTo(returnScrollPosition.x, returnScrollPosition.y);
     try {
-      await getLatestCart();
+      await getLatestCart(forceRefresh);
     } catch (error) {
       // The visible alert reports the cart-loading error.
     }
@@ -377,8 +384,8 @@
     }
   });
 
-  document.addEventListener('cart:open', () => openDrawer());
-  document.addEventListener('loomhaus:cart:open', () => openDrawer());
+  document.addEventListener('cart:open', () => openDrawer(null, true));
+  document.addEventListener('loomhaus:cart:open', () => openDrawer(null, true));
   document.addEventListener('cart:updated', () => {
     getLatestCart().catch(() => {});
   });
