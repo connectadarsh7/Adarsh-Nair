@@ -27,6 +27,7 @@
 .loomhaus-quick-view__overlay {
   position: absolute;
   inset: 0;
+  display: block;
   background: rgba(0, 0, 0, 0.48);
 }
 
