@@ -240,32 +240,30 @@ div.loomhaus-quick-view__overlay {
 
 @media screen and (max-width: 749px) {
   .loomhaus-quick-view {
-    align-items: center;
+    align-items: flex-end;
     padding: 0;
   }
 
   .loomhaus-quick-view__panel {
-    inset: auto;
-    transform: none;
-    width: calc(100% - 34px);
-    max-width: 100%;
+    width: calc(100% - 44px);
+    max-width: 420px;
     min-height: 0;
-    max-height: calc(100dvh - 32px);
+    max-height: 90dvh;
     overflow-y: auto;
-    padding: 12px;
-    border-radius: 11px;
+    padding: 22px 14px 19px;
+    border-radius: 12px 12px 0 0;
   }
 
   .loomhaus-quick-view__content {
     display: flex;
     flex-direction: column;
-    gap: 9px;
+    gap: 15px;
   }
 
   .loomhaus-quick-view__image-wrap {
     width: 100%;
-    height: 147px;
-    flex: 0 0 147px;
+    height: 164px;
+    flex: 0 0 164px;
     border-radius: 7px;
   }
 
@@ -275,7 +273,7 @@ div.loomhaus-quick-view__overlay {
   }
 
   .loomhaus-quick-view__close {
-    top: 168px;
+    top: 198px;
     right: 10px;
     width: 24px;
     height: 24px;
@@ -296,12 +294,18 @@ div.loomhaus-quick-view__overlay {
   }
 
   .loomhaus-quick-view__description {
-    margin: 0 0 8px;
+    display: block;
+    min-height: 20px;
+    margin: 7px 0 16px;
     font-size: 9px;
   }
 
   .loomhaus-quick-view__option-group {
     margin-bottom: 8px;
+  }
+
+  .loomhaus-quick-view__option-group + .loomhaus-quick-view__option-group {
+    margin-top: 8px;
   }
 
   .loomhaus-quick-view__option-label {
@@ -326,7 +330,7 @@ div.loomhaus-quick-view__overlay {
 
   .loomhaus-quick-view__add {
     min-height: 29px;
-    margin-top: 0;
+    margin-top: 2px;
     padding: 7px 14px;
     font-size: 9px;
   }
