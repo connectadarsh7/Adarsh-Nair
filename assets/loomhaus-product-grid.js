@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedOptions = {};
     let lastFocusedElement = null;
 
+    const getOptionNames = (product) => {
+      return (product?.options || []).map((option) => {
+        return typeof option === 'string' ? option : option.name;
+      });
+    };
+
     const money = (amount) => {
       const currency = window.Shopify?.currency?.active || 'INR';
 
@@ -46,9 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const getSelectedVariant = () => {
       if (!activeProduct) return null;
 
+      const optionNames = getOptionNames(activeProduct);
+
       return activeProduct.variants.find((variant) => {
         return variant.options.every((value, index) => {
-          const optionName = activeProduct.options[index];
+          const optionName = optionNames[index];
 
           return selectedOptions[optionName] === value;
         });
@@ -108,15 +116,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedOptions[optionName] === value) {
           button.classList.add('is-selected');
         }
+        button.setAttribute(
+          'aria-pressed',
+          String(selectedOptions[optionName] === value)
+        );
 
         button.addEventListener('click', () => {
           selectedOptions[optionName] = value;
 
           colorOptions
             .querySelectorAll('.loomhaus-quick-view__color-button')
-            .forEach((item) => item.classList.remove('is-selected'));
-
-          button.classList.add('is-selected');
+            .forEach((item) => {
+              const isSelected = item === button;
+              item.classList.toggle('is-selected', isSelected);
+              item.setAttribute('aria-pressed', String(isSelected));
+            });
 
           updateSizeOptions();
           updateVariantState();
@@ -129,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateSizeOptions = () => {
       if (!activeProduct) return;
 
-      const names = activeProduct.options;
+      const names = getOptionNames(activeProduct);
       const sizeIndex = getOptionIndex(names, ['size']);
 
       if (sizeIndex === -1) {
@@ -187,8 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const createOtherOptions = () => {
       otherOptions.innerHTML = '';
+      const optionNames = getOptionNames(activeProduct);
 
-      activeProduct.options.forEach((optionName, index) => {
+      optionNames.forEach((optionName, index) => {
         const lowerName = optionName.toLowerCase();
 
         if (
@@ -257,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productLink.href = product.url;
       }
 
-      const names = product.options;
+      const names = getOptionNames(product);
       const colorIndex = getOptionIndex(names, ['color', 'colour']);
       const sizeIndex = getOptionIndex(names, ['size']);
 
@@ -370,11 +385,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Size selection
     sizeSelect.addEventListener('change', () => {
-      const sizeIndex = getOptionIndex(activeProduct.options, ['size']);
+      if (!activeProduct) return;
+
+      const sizeIndex = getOptionIndex(getOptionNames(activeProduct), ['size']);
 
       if (sizeIndex === -1) return;
 
-      const sizeName = activeProduct.options[sizeIndex];
+      const sizeName = getOptionNames(activeProduct)[sizeIndex];
       selectedOptions[sizeName] = sizeSelect.value;
 
       updateVariantState();
