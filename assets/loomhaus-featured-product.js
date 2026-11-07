@@ -215,12 +215,6 @@
       }
     }
 
-    function updateVariantUrl(variant) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('variant', variant.id);
-      window.history.replaceState({}, '', url);
-    }
-
     function getQuantity() {
       return Math.max(1, Math.floor(Number(quantityInput.value) || 1));
     }
@@ -249,9 +243,7 @@
       if (addButtonText) {
         addButtonText.textContent = available ? labels.add : labels.soldOut;
       }
-
       message.textContent = '';
-      updateVariantUrl(activeVariant);
     }
 
     optionGroups.forEach((group, groupIndex) => {
