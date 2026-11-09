@@ -21,7 +21,7 @@
   flex-shrink: 0;
 
   animation: loomhaus-marquee-scroll
-    var(--marquee-duration, 30s) linear infinite;
+    var(--marquee-duration, 90s) linear infinite;
 
   will-change: transform;
 }
