@@ -75,7 +75,7 @@
 
 @keyframes loomhaus-marquee-scroll {
   from {
-    transform: translateX(0);
+    transform: translateX(50);
   }
 
   to {
