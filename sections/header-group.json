@@ -17,7 +17,7 @@
         "announcement_n8JAfF": {
           "type": "announcement",
           "settings": {
-            "text": "Free shipping on orders over <today>₹999</today>",
+            "text": "Free shipping on orders over ₹999",
             "link": ""
           }
         },
