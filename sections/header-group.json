@@ -14,6 +14,14 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
+        "announcement_98fr98": {
+          "type": "announcement",
+          "disabled": true,
+          "settings": {
+            "text": "Free shipping on orders over ₹999",
+            "link": ""
+          }
+        },
         "announcement_n8JAfF": {
           "type": "announcement",
           "settings": {
@@ -30,6 +38,7 @@
         }
       },
       "block_order": [
+        "announcement_98fr98",
         "announcement_n8JAfF",
         "announcement-bar-0"
       ],
